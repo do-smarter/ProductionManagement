@@ -2,12 +2,13 @@
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Domain.Entities;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Erfa.PruductionManagement.Application.Features.Items.Commands
 {
-    internal class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, string>
+    public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, string>
     {
 
         private readonly IAsyncRepository<Item> _itemRepository;
@@ -25,6 +26,13 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands
 
         public async Task<string> Handle(CreateItemCommand request, CancellationToken cancellationToken)
         {
+            var validator = new CreateItemCommandValidator();
+            var validationResults = await validator.ValidateAsync(request);
+            if (validationResults.Errors.Count > 0)
+            {
+                throw new Exceptions.ValidationException(validationResults);
+            }
+
             Item item = _mapper.Map<Item>(request);
             try
             {

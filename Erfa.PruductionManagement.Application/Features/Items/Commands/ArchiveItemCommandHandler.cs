@@ -3,10 +3,11 @@ using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using MediatR;
 using Erfa.PruductionManagement.Domain.Entities;
 using Erfa.PruductionManagement.Application.Exceptions;
+using Erfa.PruductionManagement.Application.Features.Items.Queries;
 
 namespace Erfa.PruductionManagement.Application.Features.Items.Commands
 {
-    internal class ArchiveItemCommandHandler : IRequestHandler<ArchiveItemCommand>
+    public class ArchiveItemCommandHandler : IRequestHandler<ArchiveItemCommand>
     {
         private readonly IAsyncRepository<ItemHistory> _itemHistoryRepository;
         private readonly IItemRepository _itemRepository;
@@ -20,6 +21,12 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands
 
         public async Task<Unit> Handle(ArchiveItemCommand request, CancellationToken cancellationToken)
         {
+            var validator = new ArchiveItemCommandValidator();
+            var validationResults = await validator.ValidateAsync(request);
+            if (validationResults.Errors.Count > 0)
+            {
+                throw new Exceptions.ValidationException(validationResults);
+            }
             Item item = await _itemRepository.GetByProductNumber(request.ProductNumber);
             if (item == null)
             {

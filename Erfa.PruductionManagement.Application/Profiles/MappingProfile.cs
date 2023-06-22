@@ -10,6 +10,9 @@ namespace Erfa.PruductionManagement.Application.Profiles
         {
             CreateMap<Item, ItemVm>().ReverseMap();
             CreateMap<Item, ItemHistory>();
-        }
+           
+            /*CreateMap<Education, EducationDto>()
+                .ForMember(dto => dto.DunCode, ent => ent.MapFrom(e => e.EducationCode.DunCode));
+        }*/
     }
 }

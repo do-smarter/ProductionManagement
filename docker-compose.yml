@@ -1,0 +1,23 @@
+﻿version: '3.9'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: 'ProductionManagement_MSSQL'
+    ports:
+      - 1633:1433
+    volumes:
+      - ~/apps/mssql/data:/var/lib/mssqlql/data
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Qwerty!23456
+
+#  rabbitmq:
+#    image: rabbitmq:3-management-alpine
+#    container_name: 'uddannelse_rabbitmq'
+#    ports:
+#        - 5672:5672
+#        - 15672:15672
+#    volumes:
+#        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+#        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq

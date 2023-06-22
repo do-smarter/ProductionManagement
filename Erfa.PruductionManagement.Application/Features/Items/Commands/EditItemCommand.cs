@@ -1,9 +1,8 @@
-﻿using Erfa.PruductionManagement.Domain.Common;
+﻿using MediatR;
 
-namespace Erfa.PruductionManagement.Domain.Entities
-
+namespace Erfa.PruductionManagement.Application.Features.Items.Commands
 {
-    public class Item : AuditableEntity
+    public class EditItemCommand : IRequest
     {
         public string ProductNumber { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
