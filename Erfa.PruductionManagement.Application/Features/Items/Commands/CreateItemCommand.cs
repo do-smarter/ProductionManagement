@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Erfa.PruductionManagement.Application.Features.Items.Commands
 {
-    public class CreateItemCommand : IRequest<Guid>
+    public class CreateItemCommand : IRequest<string>
     {
         public string ProductNumber { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

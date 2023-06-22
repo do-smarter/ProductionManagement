@@ -7,7 +7,7 @@ namespace Erfa.PruductionManagement.Api.Middlewares
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        public ILogger<ExceptionHandlerMiddleware> _logger { get; }
+        private ILogger<ExceptionHandlerMiddleware> _logger { get; }
 
         public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {
