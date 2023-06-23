@@ -4,6 +4,7 @@ using Erfa.ProductionManagement.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Erfa.ProductionManagement.Persistance.Migrations
 {
     [DbContext(typeof(ErfaDbContext))]
-    partial class ErfaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230620225425_Alter_Items_Remove_Id")]
+    partial class Alter_Items_Remove_Id
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,10 +66,10 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                             ProductNumber = "XYZ123",
                             Category = "Shelv",
                             CreatedBy = "Magdalena",
-                            CreatedDate = new DateTime(2023, 6, 23, 14, 26, 50, 835, DateTimeKind.Local).AddTicks(4323),
+                            CreatedDate = new DateTime(2023, 6, 21, 0, 54, 25, 31, DateTimeKind.Local).AddTicks(3084),
                             Description = "Very nice piece of metal",
                             LastModifiedBy = "Magdalena",
-                            LastModifiedDate = new DateTime(2023, 6, 23, 14, 26, 50, 835, DateTimeKind.Local).AddTicks(4325),
+                            LastModifiedDate = new DateTime(2023, 6, 21, 0, 54, 25, 31, DateTimeKind.Local).AddTicks(3086),
                             ProductWeight = 100.0,
                             ProductionTimeSec = 100.0
                         },
@@ -75,10 +78,10 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                             ProductNumber = "ABC987",
                             Category = "Shelv",
                             CreatedBy = "Magdalena",
-                            CreatedDate = new DateTime(2023, 6, 23, 14, 26, 50, 835, DateTimeKind.Local).AddTicks(4331),
+                            CreatedDate = new DateTime(2023, 6, 21, 0, 54, 25, 31, DateTimeKind.Local).AddTicks(3091),
                             Description = "Not so nice piece of metal",
                             LastModifiedBy = "Magdalena",
-                            LastModifiedDate = new DateTime(2023, 6, 23, 14, 26, 50, 835, DateTimeKind.Local).AddTicks(4332),
+                            LastModifiedDate = new DateTime(2023, 6, 21, 0, 54, 25, 31, DateTimeKind.Local).AddTicks(3093),
                             ProductWeight = 50.0,
                             ProductionTimeSec = 50.0
                         });
@@ -93,9 +96,6 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                     b.Property<DateTime>("ArchiveDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("Archived")
-                        .HasColumnType("bit");
-
                     b.Property<string>("ArchivedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -106,6 +106,9 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ProductNumber")
                         .IsRequired()

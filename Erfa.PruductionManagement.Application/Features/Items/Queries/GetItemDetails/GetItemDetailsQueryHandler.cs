@@ -5,7 +5,7 @@ using Erfa.PruductionManagement.Domain.Entities;
 using FluentValidation;
 using MediatR;
 
-namespace Erfa.PruductionManagement.Application.Features.Items.Queries
+namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemDetails
 {
     internal class GetItemDetailsQueryHandler : IRequestHandler<GetItemDetailsQuery, ItemVm>
     {

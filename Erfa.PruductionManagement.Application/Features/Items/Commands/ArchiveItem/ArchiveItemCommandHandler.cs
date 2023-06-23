@@ -4,9 +4,9 @@ using MediatR;
 using Erfa.PruductionManagement.Domain.Entities;
 using Erfa.PruductionManagement.Application.Exceptions;
 
-namespace Erfa.PruductionManagement.Application.Features.Items.Commands
+namespace Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveItem
 {
-    internal class ArchiveItemCommandHandler : IRequestHandler<ArchiveItemCommand>
+    public class ArchiveItemCommandHandler : IRequestHandler<ArchiveItemCommand>
     {
         private readonly IAsyncRepository<ItemHistory> _itemHistoryRepository;
         private readonly IItemRepository _itemRepository;
@@ -20,6 +20,12 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands
 
         public async Task<Unit> Handle(ArchiveItemCommand request, CancellationToken cancellationToken)
         {
+            var validator = new ArchiveItemCommandValidator();
+            var validationResults = await validator.ValidateAsync(request);
+            if (validationResults.Errors.Count > 0)
+            {
+                throw new ValidationException(validationResults);
+            }
             Item item = await _itemRepository.GetByProductNumber(request.ProductNumber);
             if (item == null)
             {
@@ -30,6 +36,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands
             // TODO Set user on histroy object
             history.ArchivedBy = "Magdalena";
             history.State = Domain.Enums.ArchiveState.Removed;
+            history.Archived = true;
 
             try
             {

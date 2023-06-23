@@ -1,16 +1,13 @@
-﻿
-using Erfa.PruductionManagement.Domain.Common;
+﻿using MediatR;
 
-namespace Erfa.PruductionManagement.Domain.Entities
+namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem
 {
-    public class ItemHistory : ArchivedEntity
+    public class CreateItemCommand : IRequest<string>
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
         public string ProductNumber { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public double ProductionTimeSec { get; set; }
         public double ProductWeight { get; set; }
         public string Category { get; set; } = string.Empty;
-        public bool Archived { get; set; } 
     }
 }

@@ -9,7 +9,8 @@ namespace Erfa.ProductionManagement.Persistance.Configurations
         public void Configure(EntityTypeBuilder<Item> builder)
         {
             builder.Property(i => i.ProductNumber)
-                .IsRequired();
+                .IsRequired()
+               ;
         }
     }
 }

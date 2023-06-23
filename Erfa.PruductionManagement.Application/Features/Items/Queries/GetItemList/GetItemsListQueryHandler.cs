@@ -3,7 +3,7 @@ using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Domain.Entities;
 using MediatR;
 
-namespace Erfa.PruductionManagement.Application.Features.Items.Queries
+namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemList
 {
     internal class GetItemsListQueryHandler : IRequestHandler<GetItemsListQuery, List<ItemVm>>
     {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 
 namespace Erfa.ProductionManagement.Persistance
-{
+{      
     public class ErfaDbContext : DbContext
     {
         public ErfaDbContext(DbContextOptions<ErfaDbContext> options) : base(options)
@@ -30,7 +30,7 @@ namespace Erfa.ProductionManagement.Persistance
                 Description = "Very nice piece of metal",
                 LastModifiedBy = user,
                 LastModifiedDate = DateTime.Now,
-                Id = Guid.NewGuid(),
+                //Id = Guid.NewGuid(),
                 ProductionTimeSec = 100,
                 ProductNumber = "XYZ123",
                 ProductWeight = 100,
@@ -44,7 +44,7 @@ namespace Erfa.ProductionManagement.Persistance
                 Description = "Not so nice piece of metal",
                 LastModifiedBy = user,
                 LastModifiedDate = DateTime.Now,
-                Id = Guid.NewGuid(),
+                // Id = Guid.NewGuid(),
                 ProductionTimeSec = 50,
                 ProductNumber = "ABC987",
                 ProductWeight = 50,
@@ -129,7 +129,7 @@ namespace Erfa.ProductionManagement.Persistance
                 Id = Guid.NewGuid(),
                 IsMerged = false,
                 ProductionItems = { pi1 }
-                
+
             };
 
             ProductionGroup pc2 = new ProductionGroup()
@@ -155,7 +155,9 @@ namespace Erfa.ProductionManagement.Persistance
             };
             List<ProductionGroup> prodList = new List<ProductionGroup> { pc1, pc2, pc3 };
 
+            modelBuilder.Entity<Item>().HasKey( "ProductNumber");
             modelBuilder.Entity<Item>().HasData(i1, i2);
+
 
             /*
             modelBuilder.Entity<ProductionItem>().HasData(pi1, pi2, pi2, pi4, pi5);
@@ -176,6 +178,15 @@ namespace Erfa.ProductionManagement.Persistance
                     case EntityState.Modified:
                         entry.Entity.LastModifiedDate = DateTime.Now;
                         break;
+                }
+            }
+            foreach (var entry in ChangeTracker.Entries<ArchivedEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.ArchiveDate = DateTime.Now;
+                        break;                    
                 }
             }
             return base.SaveChangesAsync(cancellationToken);

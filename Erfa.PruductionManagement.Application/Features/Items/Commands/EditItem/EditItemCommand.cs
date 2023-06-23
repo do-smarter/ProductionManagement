@@ -1,9 +1,8 @@
-﻿using Erfa.PruductionManagement.Application.Features.Items.Queries;
-using MediatR;
+﻿using MediatR;
 
-namespace Erfa.PruductionManagement.Application.Features.Items.Commands
+namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
 {
-    public class CreateItemCommand : IRequest<Guid>
+    public class EditItemCommand : IRequest
     {
         public string ProductNumber { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

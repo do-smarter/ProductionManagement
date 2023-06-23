@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Erfa.PruductionManagement.Application.Features.Items.Queries
+namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemDetails
 {
     public class GetItemDetailsQueryValidator : AbstractValidator<GetItemDetailsQuery>
     {

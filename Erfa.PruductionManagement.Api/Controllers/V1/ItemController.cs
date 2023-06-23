@@ -1,4 +1,10 @@
-﻿using Erfa.PruductionManagement.Application.Features.Items.Queries;
+﻿using Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveItem;
+using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
+using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRangeItems;
+using Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem;
+using Erfa.PruductionManagement.Application.Features.Items.Queries;
+using Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemDetails;
+using Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemList;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,24 +21,64 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             _mediator = mediator;
         }
 
-        [HttpGet("AllItems", Name = "GetAllItems")]
+        [HttpGet("GetAllItems", Name = "GetAllItems")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<List<ItemVm>>> GetAllItems()
         {
-            var itemVmList = await _mediator.Send(new GetItemsListQuery());
-            return Ok(itemVmList);
+            var result = await _mediator.Send(new GetItemsListQuery());
+            return Ok(result);
         }
 
-        [HttpGet("ItemDetails", Name = "GetItemsByProductNumber")]
+        [HttpGet("GetItemDetails", Name = "GetItemByProductNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ItemVm>> GetItemDetails([FromQuery] string query)
+        public async Task<ActionResult<ItemVm>> GetItemDetails([FromQuery] string ProductNumber)
         {
-            var itemVm = await _mediator.Send(new GetItemDetailsQuery(query));
-            return Ok(itemVm);
+            var result = await _mediator.Send(new GetItemDetailsQuery(ProductNumber));
+            return Ok(result);
+        }
+
+        [HttpPost("CreateItem", Name = "CreateNewItem")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<string>> CreateNewItem([FromBody] CreateItemCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("CreateItemRange", Name = "CreateRangeOfNewItem")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<string>>> CreateRangeOfItems([FromBody] CreateRangeItemsCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("EditItem", Name = "EditItem")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> EditItem([FromBody] EditItemCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("ArchiveItem", Name = "ArchiveItem")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> ArchiveItem([FromBody] ArchiveItemCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

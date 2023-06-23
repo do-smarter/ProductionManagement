@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Erfa.PruductionManagement.Application.Features.Items.Queries
+namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemList
 {
     public class GetItemsListQuery : IRequest<List<ItemVm>>
     {
