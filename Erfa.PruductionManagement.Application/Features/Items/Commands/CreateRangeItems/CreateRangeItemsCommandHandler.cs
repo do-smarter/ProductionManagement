@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
+using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
 using Erfa.PruductionManagement.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Erfa.PruductionManagement.Application.Features.Items.Commands
+namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRangeItems
 {
     public class CreateRangeItemsCommandHandler : IRequestHandler<CreateRangeItemsCommand, List<string>>
     {
@@ -42,10 +43,10 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands
                 throw new PersistanceFailedException(nameof(Item), request);
             }
 
-            List<string> result = new List<string>();            
-            
-            items.ForEach(item =>  result.Add(item.ProductNumber) );
-            
+            List<string> result = new List<string>();
+
+            items.ForEach(item => result.Add(item.ProductNumber));
+
             return result;
         }
     }

@@ -180,6 +180,15 @@ namespace Erfa.ProductionManagement.Persistance
                         break;
                 }
             }
+            foreach (var entry in ChangeTracker.Entries<ArchivedEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.ArchiveDate = DateTime.Now;
+                        break;                    
+                }
+            }
             return base.SaveChangesAsync(cancellationToken);
         }
     }

@@ -2,7 +2,6 @@
 {
     public class ItemVm
     {
-        public Guid Id { get; set; }
         public string ProductNumber { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public double ProductionTimeSec { get; set; }

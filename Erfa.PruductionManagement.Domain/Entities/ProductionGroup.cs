@@ -7,8 +7,7 @@ namespace Erfa.PruductionManagement.Domain.Entities
     {
         public Guid Id { get; set; } = new Guid();
         public List<ProductionItem> ProductionItems { get; set; } = new List<ProductionItem>();
-        //public List<string> OrderNumbers { get; set; } = new List<string>();
-        public bool IsMerged { get; set; }
+        public bool IsMerged { get; set; } = false;
         public int Priority { get; set; }
     }
 

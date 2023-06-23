@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Erfa.PruductionManagement.Application.Features.Items.Commands
+namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem
 {
     public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
     {

@@ -35,7 +35,7 @@ namespace Erfa.PruductionManagement.Domain.Entities
         public int Quantity { get; set; }
         public string OrderNumber { get; set; } = string.Empty;
         public string RalGalv { get; set; } = string.Empty;
-        public string Comment { get; set; }
+        public string Comment { get; set; } = string.Empty;
         public ProductionState State { get; set; } = ProductionState.New;
         public bool ProdEquals(object? obj)
         {
