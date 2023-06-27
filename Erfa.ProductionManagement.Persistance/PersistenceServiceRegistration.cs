@@ -15,8 +15,9 @@ namespace Erfa.ProductionManagement.Persistance
                 options.UseSqlServer(configuration.GetConnectionString("ErfaProdConnString")));
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
-            
+
             services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IProductionItemRepository, ProductionItemRepository>();
             services.AddScoped<IProductionGroupRepository, ProductionGroupRepository>();
 
 

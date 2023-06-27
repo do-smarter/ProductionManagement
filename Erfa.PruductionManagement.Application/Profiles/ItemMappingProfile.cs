@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
+using Erfa.PruductionManagement.Application.Features.Items;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem;
-using Erfa.PruductionManagement.Application.Features.Items.Queries;
-using Erfa.PruductionManagement.Application.Features.ProductionItems.Queries;
 using Erfa.PruductionManagement.Domain.Entities;
 
 namespace Erfa.PruductionManagement.Application.Profiles

@@ -127,7 +127,6 @@ namespace Erfa.ProductionManagement.Persistance
                 LastModifiedBy = user,
                 LastModifiedDate = DateTime.Now,
                 Id = Guid.NewGuid(),
-                IsMerged = false,
                 ProductionItems = { pi1 }
 
             };
@@ -139,7 +138,6 @@ namespace Erfa.ProductionManagement.Persistance
                 LastModifiedBy = user,
                 LastModifiedDate = DateTime.Now,
                 Id = Guid.NewGuid(),
-                IsMerged = false,
                 ProductionItems = { pi2, pi3 }
             };
 
@@ -150,20 +148,13 @@ namespace Erfa.ProductionManagement.Persistance
                 LastModifiedBy = user,
                 LastModifiedDate = DateTime.Now,
                 Id = Guid.NewGuid(),
-                IsMerged = true,
                 ProductionItems = { pi4, pi5 }
             };
             List<ProductionGroup> prodList = new List<ProductionGroup> { pc1, pc2, pc3 };
 
             modelBuilder.Entity<Item>().HasKey( "ProductNumber");
             modelBuilder.Entity<Item>().HasData(i1, i2);
-
-
-            /*
-            modelBuilder.Entity<ProductionItem>().HasData(pi1, pi2, pi2, pi4, pi5);
-            modelBuilder.Entity<ProductionComponent>().HasData(pc1, pc2, pc3);
-            modelBuilder.Entity<Priority>().HasData(priority);
-            */
+                       
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -191,5 +182,6 @@ namespace Erfa.ProductionManagement.Persistance
             }
             return base.SaveChangesAsync(cancellationToken);
         }
+
     }
 }

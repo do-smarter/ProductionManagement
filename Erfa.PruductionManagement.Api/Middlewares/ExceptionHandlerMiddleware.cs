@@ -43,7 +43,7 @@ namespace Erfa.PruductionManagement.Api.Middlewares
                     httpStatusCode = HttpStatusCode.BadRequest;
                     result = JsonSerializer.Serialize(new ValidationErrorDto("Invalid request", 400, validationException.ValdationErrors));
                     break;
-                case EntityUnmodifiedException badRequestException:
+                case EntityUpdateException badRequestException:
                     httpStatusCode = HttpStatusCode.BadRequest;
                     result = JsonSerializer.Serialize(new ErrorDto(badRequestException.Message, 400));
                     break;

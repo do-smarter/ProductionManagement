@@ -1,4 +1,5 @@
 ﻿using Erfa.PruductionManagement.Domain.Common;
+using Erfa.PruductionManagement.Domain.Enums;
 
 namespace Erfa.PruductionManagement.Domain.Entities
 
@@ -7,8 +8,8 @@ namespace Erfa.PruductionManagement.Domain.Entities
     {
         public Guid Id { get; set; } = new Guid();
         public List<ProductionItem> ProductionItems { get; set; } = new List<ProductionItem>();
-        public bool IsMerged { get; set; } = false;
         public int Priority { get; set; }
+        public ProductionState GroupState { get; set; } = ProductionState.New;
     }
 
 }

@@ -1,4 +1,4 @@
-﻿namespace Erfa.PruductionManagement.Application.Features.Items.Queries
+﻿namespace Erfa.PruductionManagement.Application.Features.Items
 {
     public class ItemVm
     {

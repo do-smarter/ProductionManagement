@@ -1,4 +1,5 @@
-﻿using Erfa.PruductionManagement.Domain.Enums;
+﻿using Erfa.PruductionManagement.Application.Services;
+using Erfa.PruductionManagement.Domain.Enums;
 using FluentValidation;
 
 namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.CreateProductionItem
@@ -12,20 +13,8 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
             RuleFor(p => p.OrderNumber).NotNull().NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(p => p.Quantity).GreaterThan(0).WithMessage("{PropertyName} is required.");
             RuleFor(p => p.State).IsEnumName(typeof(ProductionState), false)
-                .WithMessage(ProductionStatesList());
-        }
+                                 .WithMessage(ProductionService.ProductionStatesListValidationMsg());
 
-        private string ProductionStatesList()
-        {
-            var stateList = Enum.GetValues(typeof(ProductionState)).Cast<ProductionState>().ToList();
-
-            string message = "{PropertyName} must be one of:";
-            foreach (var state in stateList)
-            {
-                message += " " + state.ToString();
-                
-            }
-            return message;
         }
     }
 }

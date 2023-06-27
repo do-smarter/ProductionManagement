@@ -2,6 +2,7 @@
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
+using Erfa.PruductionManagement.Application.Services;
 using Erfa.PruductionManagement.Domain.Entities;
 using FluentValidation;
 using MediatR;
@@ -26,11 +27,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRa
         {
 
             var validator = new CreateRangeItemsCommandValidator();
-            var validationResults = await validator.ValidateAsync(request);
-            if (validationResults.Errors.Count > 0)
-            {
-                throw new Exceptions.ValidationException(validationResults);
-            }
+            await ProductionService.ValidateRequest(request, validator);
 
             List<Item> items = _mapper.Map<List<Item>>(request);
             try

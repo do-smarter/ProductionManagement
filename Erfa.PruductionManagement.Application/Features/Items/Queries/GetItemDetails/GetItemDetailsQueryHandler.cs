@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
+using Erfa.PruductionManagement.Application.Services;
 using Erfa.PruductionManagement.Domain.Entities;
-using FluentValidation;
 using MediatR;
 
 namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemDetails
@@ -21,12 +21,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemDe
         public async Task<ItemVm> Handle(GetItemDetailsQuery request, CancellationToken cancellationToken)
         {
             var validator = new GetItemDetailsQueryValidator();
-            var validationResults = await validator.ValidateAsync(request);
-            if (validationResults.Errors.Count > 0)
-            {
-                throw new Exceptions.ValidationException(validationResults);
-            }
-
+            await ProductionService.ValidateRequest(request, validator);
 
             Item item = await _itemRepository.GetByProductNumber(request.ProductNumber);
             if (item == null)
