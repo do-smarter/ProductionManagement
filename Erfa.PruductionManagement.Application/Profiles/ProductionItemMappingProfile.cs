@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Erfa.PruductionManagement.Application.Features.ProductionItems;
 using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.CreateProductionItem;
-using Erfa.PruductionManagement.Application.Features.ProductionItems.Queries;
 using Erfa.PruductionManagement.Domain.Entities;
 
 namespace Erfa.PruductionManagement.Application.Profiles
@@ -9,8 +9,18 @@ namespace Erfa.PruductionManagement.Application.Profiles
     {
         public ProductionItemMappingProfile()
         {
-            CreateMap<ProductionItem, ProductionItemVm>().ReverseMap();
             CreateMap<CreateProductionItemCommand, ProductionItem>();
+            CreateMap<ProductionItem, ProductionItemHistory>()
+                .ForMember(pih => pih.ProductNumber, pi => pi.MapFrom(e => e.Item.ProductNumber))
+                .ForMember(pih => pih.ProductionItemId, pi => pi.MapFrom(e => e.Id))
+                .ForMember(pih => pih.State, pi => pi.MapFrom(e => e.State.ToString()));
+
+            CreateMap<ProductionItem, ProductionItemVm>()
+                .ForMember(vm => vm.Id, pi => pi.MapFrom(e => e.Id))
+                .ForMember(vm => vm.ProductNumber, pi => pi.MapFrom(e => e.Item.ProductNumber))
+                .ForMember(vm => vm.Description, pi => pi.MapFrom(e => e.Item.Description))
+                .ForMember(vm => vm.ProductionTimeSec, pi => pi.MapFrom(e => e.Item.ProductionTimeSec))
+                .ForMember(vm => vm.State, pi => pi.MapFrom(e => e.State.ToString()));
         }
     }
 }

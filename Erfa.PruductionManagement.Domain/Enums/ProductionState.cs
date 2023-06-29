@@ -2,6 +2,6 @@
 {
     public enum ProductionState
     {
-        New, Pending, InProgress, Done, Cancelled
+        New, Pending, InProgress, Done, Cancelled, Changed
     }
 }

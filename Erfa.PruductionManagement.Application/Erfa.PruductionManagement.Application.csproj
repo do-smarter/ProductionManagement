@@ -20,4 +20,9 @@
     <ProjectReference Include="..\Erfa.PruductionManagement.Domain\Erfa.PruductionManagement.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\ProductionGroups\Commands\TakeDownProductionGroup\" />
+    <Folder Include="Features\ProductionGroups\Commands\UniteProductionGroupsPriority\" />
+  </ItemGroup>
+
 </Project>

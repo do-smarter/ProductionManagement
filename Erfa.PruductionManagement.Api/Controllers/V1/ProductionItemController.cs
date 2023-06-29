@@ -1,4 +1,8 @@
-﻿using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.CreateProductionItem;
+﻿using Erfa.PruductionManagement.Application.Features.ProductionItems;
+using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.ArchiveProductionItem;
+using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.ChangeProductionState;
+using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.CreateProductionItem;
+using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.EditProductionItem;
 using Erfa.PruductionManagement.Application.Features.ProductionItems.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -35,5 +39,37 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             var result = await _mediator.Send(request);
             return Ok(result);
         }
+
+        [HttpPut("EditProductionItem", Name = "Edit Production Item")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> EditProductionItem([FromBody] EditProductionItemCommand request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+        [HttpPost("ChangeProductionItemState", Name = "Change Production Item's State")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> State([FromBody] ChangeProductionItemStateCommand request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpDelete("ArchiveProductionItem", Name = "Archive Production Item")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> ArchiveProductionItem([FromBody] ArchiveProductionItemCommand request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
+        
+
     }
 }

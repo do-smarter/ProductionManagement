@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Erfa.PruductionManagement.Application.RequestModels;
+using FluentValidation;
 
 namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRangeItems
 {
@@ -6,7 +7,10 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRa
     {
         public CreateRangeItemsCommandValidator()
         {
-            RuleFor(e => e).NotEmpty().WithMessage("No items provided");
+            RuleFor(p => p.UserName).NotNull().NotEmpty()
+                .WithMessage("Headers are missing {PropertyName}.");
+            RuleFor(e => e.Items).NotEmpty()
+                .WithMessage("No items provided");
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace Erfa.PruductionManagement.Application.Exceptions
 {
-    public class EntityUnmodifiedException : Exception
+    public class EntityUpdateException : Exception
     {
-        public EntityUnmodifiedException(string name, object key)
+        public EntityUpdateException(string name, object key)
             : base($"{name} ({key}) not modified")
         {
         }

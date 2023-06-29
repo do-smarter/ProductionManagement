@@ -6,6 +6,8 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
     {
         public EditItemCommandValidator()
         {
+            RuleFor(p => p.UserName).NotNull().NotEmpty()
+                .WithMessage("Headers are missing {PropertyName}.");
             RuleFor(p => p.ProductNumber).NotEmpty().NotNull()
                 .WithMessage("{PropertyName} is required.");
             RuleFor(p => p.Description).NotEmpty().NotNull()

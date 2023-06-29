@@ -1,13 +1,19 @@
-﻿using MediatR;
+﻿using Erfa.PruductionManagement.Api.RequestModels;
+using MediatR;
 
 namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem
 {
-    public class CreateItemCommand : IRequest<string>
+    public class CreateItemCommand : CreateItemRequestModel, IRequest<string>
     {
-        public string ProductNumber { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public double ProductionTimeSec { get; set; }
-        public double ProductWeight { get; set; }
-        public string Category { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+        public CreateItemCommand(CreateItemRequestModel request, string userName)
+        {
+            UserName = userName;
+            ProductNumber = request.ProductNumber;
+            Description = request.Description;
+            ProductionTimeSec = request.ProductionTimeSec;
+            ProductWeight = request.ProductWeight;
+            Category = request.Category;
+        }
     }
 }

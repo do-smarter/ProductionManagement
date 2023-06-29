@@ -6,6 +6,14 @@ namespace Erfa.PruductionManagement.Domain.Entities
 {
     public class ProductionItem : AuditableEntity
     {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public Item Item { get; set; }
+        public int Quantity { get; set; }
+        public string OrderNumber { get; set; } = string.Empty;
+        public string RalGalv { get; set; } = string.Empty;
+        public string Comment { get; set; } = string.Empty;
+        public ProductionState State { get; set; } = ProductionState.New;
+
         public ProductionItem()
         {
         }
@@ -30,13 +38,6 @@ namespace Erfa.PruductionManagement.Domain.Entities
             RalGalv = prodItem.RalGalv.ToUpper();
         }
 
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public Item Item { get; set; }
-        public int Quantity { get; set; }
-        public string OrderNumber { get; set; } = string.Empty;
-        public string RalGalv { get; set; } = string.Empty;
-        public string Comment { get; set; } = string.Empty;
-        public ProductionState State { get; set; } = ProductionState.New;
         public bool ProdEquals(object? obj)
         {
             return obj is ProductionItem item &&

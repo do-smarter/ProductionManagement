@@ -43,13 +43,21 @@ namespace Erfa.PruductionManagement.Api.Middlewares
                     httpStatusCode = HttpStatusCode.BadRequest;
                     result = JsonSerializer.Serialize(new ValidationErrorDto("Invalid request", 400, validationException.ValdationErrors));
                     break;
-                case EntityUnmodifiedException badRequestException:
+                case EntityUpdateException badRequestException:
                     httpStatusCode = HttpStatusCode.BadRequest;
                     result = JsonSerializer.Serialize(new ErrorDto(badRequestException.Message, 400));
                     break;
                 case ResourceNotFoundException resourceNotFoundException:
                     httpStatusCode = HttpStatusCode.NotFound;
                     result = JsonSerializer.Serialize(new ErrorDto(resourceNotFoundException.Message, 404));
+                    break;
+                case PersistanceFailedException persistanceFailedException:
+                    httpStatusCode = HttpStatusCode.InternalServerError;
+                    result = JsonSerializer.Serialize(new ErrorDto(persistanceFailedException.Message, 500));
+                    break;
+                case AuthorizationException authorizationException:
+                    httpStatusCode = HttpStatusCode.Unauthorized;
+                    result = JsonSerializer.Serialize(new ErrorDto(authorizationException.Message, 401));
                     break;
                 default:
                     httpStatusCode = HttpStatusCode.InternalServerError;

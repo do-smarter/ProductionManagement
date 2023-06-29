@@ -4,6 +4,6 @@ namespace Erfa.PruductionManagement.Application.Contracts.Persistance
 {
     public interface IItemRepository : IAsyncRepository<Item>
     {
-        public Task<Item> GetByProductNumber(string ProductNumber);
+        Task<Item> GetByProductNumber(string ProductNumber);
     }
 }

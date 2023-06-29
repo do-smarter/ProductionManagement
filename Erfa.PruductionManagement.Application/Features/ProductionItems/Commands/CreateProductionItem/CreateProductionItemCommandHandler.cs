@@ -15,9 +15,9 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
         private readonly ProductionService _productionService;
 
         public CreateProductionItemCommandHandler(
-                        IAsyncRepository<ProductionItem> productionItemRepository, 
-                        IItemRepository itemRepository, 
-                        IMapper mapper, 
+                        IAsyncRepository<ProductionItem> productionItemRepository,
+                        IItemRepository itemRepository,
+                        IMapper mapper,
                         ProductionService productionService)
         {
             _productionItemRepository = productionItemRepository;
@@ -29,11 +29,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
         public async Task<Guid> Handle(CreateProductionItemCommand request, CancellationToken cancellationToken)
         {
             var validator = new CreateProductionItemCommandValidator();
-            var validationResults = await validator.ValidateAsync(request);
-            if (validationResults.Errors.Count > 0)
-            {
-                throw new ValidationException(validationResults);
-            }
+            await ProductionService.ValidateRequest(request, validator);
 
             Item item = await _itemRepository.GetByProductNumber(request.ProductNumber);
             if (item == null)
@@ -43,7 +39,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
 
             ProductionItem productionItem = _mapper.Map<ProductionItem>(request);
             productionItem.Item = item;
-                        
+
             try
             {
                 await _productionItemRepository.AddAsync(productionItem);

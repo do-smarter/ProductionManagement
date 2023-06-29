@@ -1,6 +1,6 @@
-﻿namespace Erfa.PruductionManagement.Application.Features.Items.Queries
+﻿namespace Erfa.PruductionManagement.Application.RequestModels
 {
-    public class ItemVm
+    public class EditItemRequestModel
     {
         public string ProductNumber { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

@@ -2,6 +2,7 @@
 using AutoMapper;
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
+using Erfa.PruductionManagement.Application.Services;
 using Erfa.PruductionManagement.Domain.Entities;
 using MediatR;
 
@@ -25,27 +26,23 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
         public async Task<Unit> Handle(EditItemCommand request, CancellationToken cancellationToken)
         {
             var validator = new EditItemCommandValidator();
-            var validationResults = await validator.ValidateAsync(request);
-            if (validationResults.Errors.Count > 0)
-            {
-                throw new ValidationException(validationResults);
-            }
+            await ProductionService.ValidateRequest(request, validator);
 
             Item item = await _itemRepository.GetByProductNumber(request.ProductNumber);
             Item updated = _mapper.Map<Item>(request);
+            updated.LastModifiedBy = request.UserName;
             if (item == null)
             {
                 throw new ResourceNotFoundException(nameof(Item), request.ProductNumber);
             }
             if (!item.Updated(updated))
             {
-                throw new EntityUnmodifiedException(nameof(Item), request);
+                throw new EntityUpdateException(nameof(Item), request.ProductNumber);
             }
 
             ItemHistory history = _mapper.Map<ItemHistory>(item);
-            // TODO Set user on histroy object
-            history.ArchivedBy = "Magdalena";
-            history.State = Domain.Enums.ArchiveState.Changed;
+            history.ArchivedBy = request.UserName;
+            history.ArchiveState = Domain.Enums.ArchiveState.Changed;
 
             item = UpdateItemProperties(item, request);
 
@@ -56,7 +53,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
             }
             catch (Exception ex)
             {
-                throw new PersistanceFailedException(nameof(Item), request);
+                throw new PersistanceFailedException(nameof(Item), request.ProductNumber);
             }
 
             return Unit.Value;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
+using Erfa.PruductionManagement.Application.Services;
 using Erfa.PruductionManagement.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -25,13 +26,10 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateIt
         public async Task<string> Handle(CreateItemCommand request, CancellationToken cancellationToken)
         {
             var validator = new CreateItemCommandValidator();
-            var validationResults = await validator.ValidateAsync(request);
-            if (validationResults.Errors.Count > 0)
-            {
-                throw new ValidationException(validationResults);
-            }
+            await ProductionService.ValidateRequest(request, validator);
 
             Item item = _mapper.Map<Item>(request);
+            item.CreatedBy = request.UserName;
             try
             {
                 await _itemRepository.AddAsync(item);
