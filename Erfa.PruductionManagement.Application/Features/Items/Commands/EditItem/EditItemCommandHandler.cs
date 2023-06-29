@@ -41,7 +41,6 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
             }
 
             ItemHistory history = _mapper.Map<ItemHistory>(item);
-            // TODO Set user on histroy object
             history.ArchivedBy = request.UserName;
             history.ArchiveState = Domain.Enums.ArchiveState.Changed;
 
