@@ -31,34 +31,26 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        [HttpPost("CreateProductionItem", Name = "Create Production Item")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Guid>> CreateNewProductionItem([FromBody] CreateProductionItemCommand request)
-        {
-            string userName = Utils.GetUserName(Request);
-
-            var result = await _mediator.Send(request);
-            return Ok(result);
-        }
-
         [HttpPut("EditProductionItem", Name = "Edit Production Item")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> EditProductionItem([FromBody] EditProductionItemCommand request)
+        public async Task<ActionResult> EditProductionItem([FromBody] EditProductionItemRequestModel request,
+                                                           [FromHeader] ApiHeaders apiHeaders)
         {
-            var result = await _mediator.Send(request);
+            string userName = apiHeaders.UserName;
+
+            var result = await _mediator.Send(new EditProductionItemCommand(request, userName));
             return Ok(result);
         }
         [HttpPut("ChangeProductionItemState", Name = "Change Production Item's State")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> State([FromBody] ChangeProductionItemStateRequestModel request)
+        public async Task<ActionResult> State([FromBody] ChangeProductionItemStateRequestModel request,
+                                              [FromHeader] ApiHeaders apiHeaders)
         {
-            string userName = Utils.GetUserName(Request);
+            string userName = apiHeaders.UserName;
 
             var result = await _mediator.Send(new ChangeProductionItemStateCommand(request, userName));
             return Ok(result);
@@ -68,8 +60,10 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> ArchiveProductionItem([FromBody] ArchiveProductionItemCommand request)
+        public async Task<ActionResult> ArchiveProductionItem([FromBody] ArchiveProductionItemCommand request,
+                                                              [FromHeader] ApiHeaders apiHeaders)
         {
+            string userName = apiHeaders.UserName;
             var result = await _mediator.Send(request);
             return Ok(result);
         }

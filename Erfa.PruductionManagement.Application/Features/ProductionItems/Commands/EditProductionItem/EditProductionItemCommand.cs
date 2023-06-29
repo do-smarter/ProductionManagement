@@ -1,13 +1,21 @@
-﻿using MediatR;
+﻿using Erfa.PruductionManagement.Application.RequestModels;
+using MediatR;
 
 namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.EditProductionItem
 {
-    public class EditProductionItemCommand : IRequest
+    public class EditProductionItemCommand : EditProductionItemRequestModel, IRequest
     {
-        public Guid Id { get; set; }
-        public int Quantity { get; set; }
-        public string OrderNumber { get; set; } = string.Empty;
-        public string RalGalv { get; set; } = string.Empty;
-        public string Comment { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+
+        public EditProductionItemCommand(EditProductionItemRequestModel request, string userName)
+        {
+            UserName = userName;
+            ProductionItemId = request.ProductionItemId;
+            Quantity = request.Quantity;
+            OrderNumber = request.OrderNumber;
+            RalGalv = request.RalGalv;
+            Comment = request.Comment;
+        }
+
     }
 }

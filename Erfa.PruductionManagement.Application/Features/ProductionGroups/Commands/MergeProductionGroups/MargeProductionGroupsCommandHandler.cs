@@ -26,9 +26,8 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
 
         public async Task<ProductionGroupVm> Handle(MargeProductionGroupsCommand request, CancellationToken cancellationToken)
         {
-            var user = "Magdalena";
             var validator = new MargeProductionGroupsCommandValidator();
-            await ProductionService.ValidateRequest(request, validator);
+            await _productionService.ValidateRequest(request, validator);
 
             HashSet<Guid> uniqeGroups = new HashSet<Guid>(request.Groups);
 
@@ -56,7 +55,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
                         )
                     );
             }
-     
+
             int priority = groups.First().Priority;
             ProductionItem productionItem = new ProductionItem();
             productionItem.Item = groups[0].ProductionItems.First().Item;
@@ -73,13 +72,17 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
             }
             productionItem.OrderNumber = String.Join(", ", orders);
             productionItem.Comment = String.Join(", ", comments);
+            productionItem.CreatedBy = request.UserName;
+            productionItem.LastModifiedBy = request.UserName;
 
             ProductionGroup result = new ProductionGroup();
             result.Priority = priority;
             result.ProductionItems.Add(productionItem);
-            
-            await _productionService.MergePriorities(result, groups, user);
-                       
+            result.CreatedBy = request.UserName;
+            result.LastModifiedBy = request.UserName;
+
+            await _productionService.MergePriorities(result, groups, request.UserName);
+
             return _mapper.Map<ProductionGroupVm>(result);
         }
     }

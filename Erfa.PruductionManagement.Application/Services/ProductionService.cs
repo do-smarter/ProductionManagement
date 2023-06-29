@@ -32,51 +32,51 @@ namespace Erfa.PruductionManagement.Application.Services
                                              List<ProductionGroup> mergedProductionGroups, string user)
         {
             List<ProductionGroupHistory> productionGroupHistories
-                                = PrepareProductionGroupHistoreis(mergedProductionGroups, user);
+                                = PrepareProductionGroupHistoreis(mergedProductionGroups, user, ArchiveState.Merged);
 
             try
             {
                 await _groupRepository.MergeGroup(created, mergedProductionGroups, productionGroupHistories);
             }
-            catch (Exception ex)
+            catch
             {
+                string ids = "";
+                foreach (ProductionGroup group in mergedProductionGroups)
+                {
+                    ids += " - " + group.Id;
+
+                }
                 throw new PersistanceFailedException(nameof(ProductionGroup), "Multiple Ids");
             }
         }
 
-        internal List<ProductionGroupHistory> PrepareProductionGroupHistoreis(List<ProductionGroup> productionGroups, String user)
+        internal List<ProductionGroupHistory> PrepareProductionGroupHistoreis(List<ProductionGroup> productionGroups,
+                                                                              string user,
+                                                                              ArchiveState archiveState)
         {
             List<ProductionGroupHistory> productionGroupHistories = new List<ProductionGroupHistory>();
             foreach (var productionGroup in productionGroups)
             {
                 ProductionGroupHistory productionGroupHistory = _mapper.Map<ProductionGroupHistory>(productionGroup);
-                productionGroupHistory.ArchiveState = ArchiveState.Archived;
+                productionGroupHistory.ArchiveState = ArchiveState.Merged;
                 productionGroupHistory.ArchivedBy = user;
+                productionGroupHistory.ArchiveState = archiveState;
+                foreach (var productionItemHistory in productionGroupHistory.ProductionItems)
+                {
+                    productionItemHistory.ArchivedBy = user;
+                    productionItemHistory.ArchiveState = archiveState;
+                }
                 productionGroupHistories.Add(productionGroupHistory);
             }
             return productionGroupHistories;
         }
 
-        private List<ProductionGroup> RegroupPriorities(ProductionGroup created, List<ProductionGroup> groups)
-        {
-            if (created.Priority > groups.Count)
-            {
-                created.Priority = groups.Count;
-            }
-
-            groups.ForEach(c => { c.Priority = groups.IndexOf(c) + 1; });
-            groups.Insert(created.Priority, created);
-            groups.ForEach(c => { c.Priority = groups.IndexOf(c) + 1; });
-
-            return groups;
-        }
-
-        private async Task<int> EstimateLowestPriority()
+        internal async Task<int> EstimateLowestPriority()
         {
             var group = await _groupRepository.FindGroupWithLowestPriority();
             if (group == null)
             {
-                return 0;
+                return 1;
             }
             return group.Priority;
         }
@@ -95,12 +95,12 @@ namespace Erfa.PruductionManagement.Application.Services
             if (productionItems.Count == 0) { return false; }
             foreach (var productionItem in productionItems)
             {
-                if (!productionItems[0].ProdEquals(productionItem)) { return false; }
+                if (!productionItems[0].EqualsForProductionGroup(productionItem)) { return false; }
             }
             return true;
         }
 
-        internal static string ProductionStatesListValidationMsg()
+        internal string ProductionStatesListValidationMsg()
         {
             var stateList = Enum.GetValues(typeof(ProductionState)).Cast<ProductionState>().ToList();
 
@@ -108,19 +108,26 @@ namespace Erfa.PruductionManagement.Application.Services
             foreach (var state in stateList)
             {
                 message += " " + state.ToString();
-
             }
             return message;
         }
 
-        internal async static Task<bool> ValidateRequest<TR>(TR request, AbstractValidator<TR> validator)
-        {            
+        internal async Task<bool> ValidateRequest<TR>(TR request, AbstractValidator<TR> validator)
+        {
             var validationResults = await validator.ValidateAsync(request);
             if (validationResults.Errors.Count > 0)
             {
                 throw new Exceptions.ValidationException(validationResults);
             }
             return true;
+        }
+
+        internal async Task<ProductionItemHistory> ArchiveProductionItem(ProductionItem item, string userName, ArchiveState archiveState)
+        {
+            ProductionItemHistory productionItemHistory = _mapper.Map<ProductionItemHistory>(item);
+            productionItemHistory.ArchivedBy = userName;
+            productionItemHistory.ArchiveState = archiveState;
+            return await _productionItemHistoryRepository.AddAsync(productionItemHistory);
         }
     }
 }

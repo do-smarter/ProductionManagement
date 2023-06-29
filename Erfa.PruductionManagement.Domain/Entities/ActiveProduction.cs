@@ -55,7 +55,7 @@ namespace Erfa.PruductionManagement.Domain.Entities
 
             foreach (ProductionItem item in itemList)
             {
-                if (!item.ProdEquals(firstItem))
+                if (!item.EqualsForProductionGroup(firstItem))
                 {
                     throw new ArgumentException("not equal items!");
                 }

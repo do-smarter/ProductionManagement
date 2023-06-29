@@ -16,18 +16,23 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRa
         private readonly IAsyncRepository<Item> _itemRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateItemCommandHandler> _logger;
+        private readonly ProductionService _productionService;
 
-        public CreateRangeItemsCommandHandler(IAsyncRepository<Item> itemRepository, IMapper mapper, ILogger<CreateItemCommandHandler> logger)
+        public CreateRangeItemsCommandHandler(IAsyncRepository<Item> itemRepository,
+                                              IMapper mapper,
+                                              ILogger<CreateItemCommandHandler> logger,
+                                              ProductionService productionService)
         {
             _itemRepository = itemRepository;
             _mapper = mapper;
             _logger = logger;
+            _productionService = productionService;
         }
         public async Task<List<string>> Handle(CreateRangeItemsCommand request, CancellationToken cancellationToken)
         {
             List<string> result = new List<string>();
             var validator = new CreateRangeItemsCommandValidator();
-            await ProductionService.ValidateRequest(request, validator);
+            await _productionService.ValidateRequest(request, validator);
 
             List<Item> items = _mapper.Map<List<Item>>(request.Items);
             foreach (var item in items)

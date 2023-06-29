@@ -48,9 +48,10 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<string>> CreateNewItem([FromBody] CreateItemRequestModel request)
+        public async Task<ActionResult<string>> CreateNewItem([FromBody] CreateItemRequestModel request,
+                                                              [FromHeader] ApiHeaders apiHeaders)
         {
-            string userName = Utils.GetUserName(Request);
+            string userName = apiHeaders.UserName;
 
             var result = await _mediator.Send(new CreateItemCommand(request, userName));
             return Ok(result);
@@ -61,9 +62,10 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<string>>> CreateRangeOfItems([FromBody] List<CreateItemRequestModel> request)
+        public async Task<ActionResult<List<string>>> CreateRangeOfItems([FromBody] List<CreateItemRequestModel> request,
+                                                                         [FromHeader] ApiHeaders apiHeaders)
         {
-            string userName = Utils.GetUserName(Request);
+            string userName = apiHeaders.UserName;
 
             var result = await _mediator.Send(new CreateRangeItemsCommand(request, userName));
             return Ok(result);
@@ -74,9 +76,10 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> EditItem([FromBody] EditItemRequestModel request)
+        public async Task<ActionResult> EditItem([FromBody] EditItemRequestModel request,
+                                                 [FromHeader] ApiHeaders apiHeaders)
         {
-            string userName = Utils.GetUserName(Request);
+            string userName = apiHeaders.UserName;
 
             var result = await _mediator.Send(new EditItemCommand(request, userName));
             return Ok(result);
@@ -87,9 +90,10 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> ArchiveItem([FromBody] ArchiveItemRequestModel request)
+        public async Task<ActionResult> ArchiveItem([FromBody] ArchiveItemRequestModel request,
+                                                    [FromHeader] ApiHeaders apiHeaders)
         {
-            string userName = Utils.GetUserName(Request);
+            string userName = apiHeaders.UserName;
 
             var result = await _mediator.Send(new ArchiveItemCommand(request, userName));
             return Ok(result);

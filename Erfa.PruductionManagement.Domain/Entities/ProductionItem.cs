@@ -38,7 +38,7 @@ namespace Erfa.PruductionManagement.Domain.Entities
             RalGalv = prodItem.RalGalv.ToUpper();
         }
 
-        public bool ProdEquals(object? obj)
+        public bool EqualsForProductionGroup(object? obj)
         {
             return obj is ProductionItem item &&
                    EqualityComparer<Item>.Default.Equals(Item, item.Item) &&

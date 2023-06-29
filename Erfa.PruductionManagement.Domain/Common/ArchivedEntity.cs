@@ -8,7 +8,7 @@ namespace Erfa.PruductionManagement.Domain.Common
 
         public string? ArchivedBy { get; set; }
         public DateTime ArchiveDate { get; set; } = new DateTime();
-        public ArchiveState ArchiveState { get; set; }
+        public ArchiveState ArchiveState { get; set; } = ArchiveState.Changed;
         
     }
 }

@@ -6,14 +6,17 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
 {
     public class ChangeProductionItemStateCommandValidator : AbstractValidator<ChangeProductionItemStateCommand>
     {
-        public ChangeProductionItemStateCommandValidator()
+        private readonly ProductionService _productionService;
+        public ChangeProductionItemStateCommandValidator(ProductionService productionService)
         {
+            _productionService = productionService;
+
             RuleFor(p => p.UserName).NotNull().NotEmpty()
                 .WithMessage("Headers are missing {PropertyName}.");
             RuleFor(p => p.ProductionItemId).NotNull().NotEmpty()
                 .WithMessage("{PropertyName} is required.");
             RuleFor(p => p.State).IsEnumName(typeof(ProductionState), false)
-                .WithMessage(ProductionService.ProductionStatesListValidationMsg());
+                .WithMessage(_productionService.ProductionStatesListValidationMsg());
         }
     }
 }

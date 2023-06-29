@@ -28,8 +28,8 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
 
         public async Task<Guid> Handle(CreateProductionItemCommand request, CancellationToken cancellationToken)
         {
-            var validator = new CreateProductionItemCommandValidator();
-            await ProductionService.ValidateRequest(request, validator);
+            var validator = new CreateProductionItemCommandValidator(_productionService);
+            await _productionService.ValidateRequest(request, validator);
 
             Item item = await _itemRepository.GetByProductNumber(request.ProductNumber);
             if (item == null)
@@ -45,7 +45,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
                 await _productionItemRepository.AddAsync(productionItem);
                 await _productionService.GroupProductionItemAsync(productionItem);
             }
-            catch (Exception ex)
+            catch 
             {
 
                 throw new PersistanceFailedException(nameof(Item), request);

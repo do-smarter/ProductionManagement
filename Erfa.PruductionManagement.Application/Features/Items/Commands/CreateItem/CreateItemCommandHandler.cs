@@ -13,20 +13,23 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateIt
 
         private readonly IAsyncRepository<Item> _itemRepository;
         private readonly IMapper _mapper;
+        private readonly ProductionService _productionService;
         private ILogger<CreateItemCommandHandler> _logger { get; }
 
 
-        public CreateItemCommandHandler(IAsyncRepository<Item> itemRepository, IMapper mapper, ILogger<CreateItemCommandHandler> logger)
+        public CreateItemCommandHandler(IAsyncRepository<Item> itemRepository, IMapper mapper,
+                                        ILogger<CreateItemCommandHandler> logger, ProductionService productionService)
         {
             _itemRepository = itemRepository;
             _mapper = mapper;
             _logger = logger;
+            _productionService = productionService;
         }
 
         public async Task<string> Handle(CreateItemCommand request, CancellationToken cancellationToken)
         {
             var validator = new CreateItemCommandValidator();
-            await ProductionService.ValidateRequest(request, validator);
+            await _productionService.ValidateRequest(request, validator);
 
             Item item = _mapper.Map<Item>(request);
             item.CreatedBy = request.UserName;

@@ -13,22 +13,26 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
         private readonly IProductionItemRepository _productionItemRepository;
         private readonly IAsyncRepository<ProductionItemHistory> _productionItemHistoryRepository;
         private readonly IMapper _mapper;
+        private readonly ProductionService _productionService;
+
 
 
         public ChangeProductionItemStateCommandHandler(
                          IProductionItemRepository productionItemRepository,
                          IAsyncRepository<ProductionItemHistory> productionItemHistoryRepository,
-                         IMapper mapper)
+                         IMapper mapper,
+                         ProductionService productionService)
         {
             _productionItemRepository = productionItemRepository;
             _productionItemHistoryRepository = productionItemHistoryRepository;
             _mapper = mapper;
+            _productionService = productionService;
         }
 
         public async Task<Unit> Handle(ChangeProductionItemStateCommand request, CancellationToken cancellationToken)
         {
-            var validator = new ChangeProductionItemStateCommandValidator();
-            await ProductionService.ValidateRequest(request, validator);
+            var validator = new ChangeProductionItemStateCommandValidator(_productionService);
+            await _productionService.ValidateRequest(request, validator);
 
             ProductionState state;
             if (!Enum.TryParse<ProductionState>(request.State, true, out state))
@@ -44,17 +48,16 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
             if (state.Equals(productionItem.State)) { return Unit.Value; }
 
             productionItem.State = state;
-            productionItem.State = state;
             ProductionItemHistory history = _mapper.Map<ProductionItemHistory>(productionItem);
             history.ArchivedBy = request.UserName;
             history.ArchiveState = ArchiveState.Changed;
 
             try
             {
-                await _productionItemHistoryRepository.AddAsync(history);
+                await _productionService.ArchiveProductionItem(productionItem, request.UserName, ArchiveState.Changed);
                 await _productionItemRepository.UpdateAsync(productionItem);
             }
-            catch (Exception ex)
+            catch
             {
                 throw new PersistanceFailedException(nameof(ProductionItem), request.ProductionItemId);
             }
