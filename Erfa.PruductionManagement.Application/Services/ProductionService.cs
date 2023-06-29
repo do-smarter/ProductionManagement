@@ -46,7 +46,7 @@ namespace Erfa.PruductionManagement.Application.Services
                     ids += " - " + group.Id;
 
                 }
-                throw new PersistanceFailedException(nameof(ProductionGroup), "Multiple Ids");
+                throw new PersistanceFailedException(nameof(ProductionGroup), ids);
             }
         }
 
@@ -79,15 +79,6 @@ namespace Erfa.PruductionManagement.Application.Services
                 return 1;
             }
             return group.Priority;
-        }
-
-        internal async Task GroupProductionItemAsync(ProductionItem productionItem)
-        {
-            ProductionGroup group = new ProductionGroup();
-            group.ProductionItems.Add(productionItem);
-            group.Priority = await EstimateLowestPriority() + 1;
-
-            await _groupRepository.AddAsync(group);
         }
 
         internal bool EqalProductItems(List<ProductionItem> productionItems)

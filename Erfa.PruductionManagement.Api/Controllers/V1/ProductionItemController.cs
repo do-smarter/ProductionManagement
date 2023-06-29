@@ -1,7 +1,6 @@
 ﻿using Erfa.PruductionManagement.Application.Features.ProductionItems;
 using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.ArchiveProductionItem;
 using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.ChangeProductionState;
-using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.CreateProductionItem;
 using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.EditProductionItem;
 using Erfa.PruductionManagement.Application.Features.ProductionItems.Queries;
 using Erfa.PruductionManagement.Application.RequestModels;

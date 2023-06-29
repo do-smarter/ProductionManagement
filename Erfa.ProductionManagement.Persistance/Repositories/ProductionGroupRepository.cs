@@ -22,8 +22,8 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
                 _dbContext.ProductionItems.RemoveRange(productionGroup.ProductionItems);
             }
 
-            _dbContext.ArchivedProductionGroupss.Include(productionGroup => productionGroup.ProductionItems);
-            _dbContext.ArchivedProductionGroupss.AddRange(mergedProductionGroupsHistories);
+            _dbContext.ArchivedProductionGroups.Include(productionGroup => productionGroup.ProductionItems);
+            _dbContext.ArchivedProductionGroups.AddRange(mergedProductionGroupsHistories);
 
             await _dbContext.SaveChangesAsync();
 

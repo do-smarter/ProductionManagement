@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Erfa.PruductionManagement.Application.Features.ProductionItems;
-using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.CreateProductionItem;
 using Erfa.PruductionManagement.Application.RequestModels;
 using Erfa.PruductionManagement.Domain.Entities;
 
@@ -10,7 +9,6 @@ namespace Erfa.PruductionManagement.Application.Profiles
     {
         public ProductionItemMappingProfile()
         {
-            CreateMap<CreateProductionItemCommand, ProductionItem>();
             CreateMap<ProductionItemModel, ProductionItem>();
 
             CreateMap<ProductionItem, ProductionItemHistory>()

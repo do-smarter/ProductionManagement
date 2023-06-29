@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\ProductionGroups\Commands\TakeDownProductionGroup\" />
     <Folder Include="Features\ProductionGroups\Commands\UniteProductionGroupsPriority\" />
   </ItemGroup>
 
