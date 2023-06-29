@@ -54,20 +54,5 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             var result = await _mediator.Send(new ChangeProductionItemStateCommand(request, userName));
             return Ok(result);
         }
-
-        [HttpDelete("ArchiveProductionItem", Name = "Archive Production Item")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> ArchiveProductionItem([FromBody] ArchiveProductionItemCommand request,
-                                                              [FromHeader] ApiHeaders apiHeaders)
-        {
-            string userName = apiHeaders.UserName;
-            var result = await _mediator.Send(request);
-            return Ok(result);
-        }
-
-
-
     }
 }

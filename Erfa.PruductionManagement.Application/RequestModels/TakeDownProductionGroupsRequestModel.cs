@@ -1,6 +1,6 @@
 ﻿namespace Erfa.PruductionManagement.Application.RequestModels
 {
-    public class MergeProductionGroupsRequestModel
+    public class TakeDownProductionGroupsRequestModel
     {
         public List<Guid> ProductionGroupIds { get; set; } = new List<Guid>();
     }

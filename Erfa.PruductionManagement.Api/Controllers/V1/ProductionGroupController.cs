@@ -61,7 +61,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ProductionGroupVm>> TakeDownProductionGroup([FromBody] List<Guid> request,
+        public async Task<ActionResult<ProductionGroupVm>> TakeDownProductionGroup([FromBody] TakeDownProductionGroupsRequestModel request,
                                                                      [FromHeader] ApiHeaders apiHeaders)
         {
             string userName = apiHeaders.UserName;

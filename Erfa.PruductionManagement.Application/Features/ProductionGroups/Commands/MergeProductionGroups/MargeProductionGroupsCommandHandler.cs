@@ -29,7 +29,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
             var validator = new MargeProductionGroupsCommandValidator();
             await _productionService.ValidateRequest(request, validator);
 
-            HashSet<Guid> uniqeGroups = new HashSet<Guid>(request.Groups);
+            HashSet<Guid> uniqeGroups = new HashSet<Guid>(request.ProductionGroupIds);
 
             List<ProductionGroup> groups = await _productionGroupRepository.FindListOfGroupsByIds(uniqeGroups);
 

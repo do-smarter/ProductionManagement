@@ -1,6 +1,5 @@
 ﻿using Erfa.PruductionManagement.Application.RequestModels;
 using MediatR;
-using System.Text.RegularExpressions;
 
 namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Commands.MergeProductionGroups
 {
@@ -10,7 +9,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
         public MargeProductionGroupsCommand(MergeProductionGroupsRequestModel request, string userName)
         {
             UserName = userName;
-            Groups = request.Groups;
+            ProductionGroupIds = request.ProductionGroupIds;
         }
     }
 

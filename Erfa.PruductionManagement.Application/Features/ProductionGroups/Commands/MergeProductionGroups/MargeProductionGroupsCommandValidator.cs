@@ -9,7 +9,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
 
             RuleFor(p => p.UserName).NotNull().NotEmpty()
                 .WithMessage("Headers are missing {PropertyName}.");
-            RuleFor(p => p.Groups.Count).GreaterThan(1)
+            RuleFor(p => p.ProductionGroupIds.Count).GreaterThan(1)
                 .WithMessage("There must be at least two elements to be merged");
         }
     }
