@@ -1,4 +1,6 @@
-﻿using Erfa.PruductionManagement.Application.Contracts.Persistance;
+﻿using AutoMapper;
+using Erfa.PruductionManagement.Application.Contracts.Persistance;
+using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Domain.Entities;
 using Erfa.PruductionManagement.Domain.Enums;
 using FluentValidation;
@@ -8,25 +10,56 @@ namespace Erfa.PruductionManagement.Application.Services
     public class ProductionService
     {
         private readonly IProductionGroupRepository _groupRepository;
+        private readonly IProductionItemRepository _productionItemRepository;
+        private readonly IAsyncRepository<ProductionItemHistory> _productionItemHistoryRepository;
+        private readonly IAsyncRepository<ProductionGroupHistory> _productionGRoupHistoryRepository;
+        private readonly IMapper _mapper;
 
-        public ProductionService(IProductionGroupRepository groupRepository)
+        public ProductionService(IProductionGroupRepository groupRepository,
+                                 IProductionItemRepository productionItemRepository,
+                                 IAsyncRepository<ProductionItemHistory> productionItemHistoryRepository,
+                                 IAsyncRepository<ProductionGroupHistory> productionGRoupHistoryRepository,
+                                 IMapper mapper)
         {
             _groupRepository = groupRepository;
+            _productionItemRepository = productionItemRepository;
+            _productionItemHistoryRepository = productionItemHistoryRepository;
+            _productionGRoupHistoryRepository = productionGRoupHistoryRepository;
+            _mapper = mapper;
         }
 
-        internal async Task<int> MergePriorities(ProductionGroup created, List<ProductionGroup> components)
+        internal async Task MergePriorities(ProductionGroup created,
+                                             List<ProductionGroup> mergedProductionGroups, string user)
         {
-            
-            List<ProductionGroup> groups = await _groupRepository.ListAllOrderByPriority();
-            
-            components.ForEach(c => {
-                // TOFDO Add method for archiving production items and same for production groups and then call those methods here
-                //    groups.Remove(c); 
-                _groupRepository.DeleteAsync(c);
+            List<ProductionGroupHistory> productionGroupHistories
+                                = PrepareProductionGroupHistoreis(mergedProductionGroups, user);
 
+            try
+            {
+                await _groupRepository.MergeGroup(created, mergedProductionGroups, productionGroupHistories);
+            }
+            catch (Exception ex)
+            {
+                throw new PersistanceFailedException(nameof(ProductionGroup), "Multiple Ids");
+            }
+        }
 
-            });
-            if (created.Priority>groups.Count)
+        internal List<ProductionGroupHistory> PrepareProductionGroupHistoreis(List<ProductionGroup> productionGroups, String user)
+        {
+            List<ProductionGroupHistory> productionGroupHistories = new List<ProductionGroupHistory>();
+            foreach (var productionGroup in productionGroups)
+            {
+                ProductionGroupHistory productionGroupHistory = _mapper.Map<ProductionGroupHistory>(productionGroup);
+                productionGroupHistory.ArchiveState = ArchiveState.Archived;
+                productionGroupHistory.ArchivedBy = user;
+                productionGroupHistories.Add(productionGroupHistory);
+            }
+            return productionGroupHistories;
+        }
+
+        private List<ProductionGroup> RegroupPriorities(ProductionGroup created, List<ProductionGroup> groups)
+        {
+            if (created.Priority > groups.Count)
             {
                 created.Priority = groups.Count;
             }
@@ -35,7 +68,7 @@ namespace Erfa.PruductionManagement.Application.Services
             groups.Insert(created.Priority, created);
             groups.ForEach(c => { c.Priority = groups.IndexOf(c) + 1; });
 
-            return await _groupRepository.UpdateRangeAsync(groups);
+            return groups;
         }
 
         private async Task<int> EstimateLowestPriority()
@@ -81,7 +114,7 @@ namespace Erfa.PruductionManagement.Application.Services
         }
 
         internal async static Task<bool> ValidateRequest<TR>(TR request, AbstractValidator<TR> validator)
-        {
+        {            
             var validationResults = await validator.ValidateAsync(request);
             if (validationResults.Errors.Count > 0)
             {

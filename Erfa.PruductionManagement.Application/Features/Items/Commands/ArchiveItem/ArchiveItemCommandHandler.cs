@@ -23,7 +23,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveI
 
         public async Task<Unit> Handle(ArchiveItemCommand request,
                                        CancellationToken cancellationToken)
-        {
+        {            
             var validator = new ArchiveItemCommandValidator();
             await ProductionService.ValidateRequest(request, validator);
 
@@ -35,7 +35,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveI
 
             ItemHistory history = _mapper.Map<ItemHistory>(item);
             // TODO Set user on histroy object
-            history.ArchivedBy = "Magdalena";
+            history.ArchivedBy = request.UserName;
             history.ArchiveState = Domain.Enums.ArchiveState.Archived;
 
             try

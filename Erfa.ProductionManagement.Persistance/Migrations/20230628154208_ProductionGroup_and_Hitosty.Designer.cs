@@ -4,6 +4,7 @@ using Erfa.ProductionManagement.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Erfa.ProductionManagement.Persistance.Migrations
 {
     [DbContext(typeof(ErfaDbContext))]
-    partial class ErfaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230628154208_ProductionGroup_and_Hitosty")]
+    partial class ProductionGroup_and_Hitosty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,10 +66,10 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                             ProductNumber = "XYZ123",
                             Category = "Shelv",
                             CreatedBy = "Magdalena",
-                            CreatedDate = new DateTime(2023, 6, 28, 23, 53, 33, 817, DateTimeKind.Local).AddTicks(7366),
+                            CreatedDate = new DateTime(2023, 6, 28, 17, 42, 8, 190, DateTimeKind.Local).AddTicks(4485),
                             Description = "Very nice piece of metal",
                             LastModifiedBy = "Magdalena",
-                            LastModifiedDate = new DateTime(2023, 6, 28, 23, 53, 33, 817, DateTimeKind.Local).AddTicks(7368),
+                            LastModifiedDate = new DateTime(2023, 6, 28, 17, 42, 8, 190, DateTimeKind.Local).AddTicks(4487),
                             ProductWeight = 100.0,
                             ProductionTimeSec = 100.0
                         },
@@ -75,10 +78,10 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                             ProductNumber = "ABC987",
                             Category = "Shelv",
                             CreatedBy = "Magdalena",
-                            CreatedDate = new DateTime(2023, 6, 28, 23, 53, 33, 817, DateTimeKind.Local).AddTicks(7374),
+                            CreatedDate = new DateTime(2023, 6, 28, 17, 42, 8, 190, DateTimeKind.Local).AddTicks(4493),
                             Description = "Not so nice piece of metal",
                             LastModifiedBy = "Magdalena",
-                            LastModifiedDate = new DateTime(2023, 6, 28, 23, 53, 33, 817, DateTimeKind.Local).AddTicks(7376),
+                            LastModifiedDate = new DateTime(2023, 6, 28, 17, 42, 8, 190, DateTimeKind.Local).AddTicks(4494),
                             ProductWeight = 50.0,
                             ProductionTimeSec = 50.0
                         });
@@ -148,29 +151,6 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                     b.ToTable("ProductionGroups");
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionGroupHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ArchiveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ArchiveState")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ArchivedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProductionGroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ArchivedProductionGroupss");
-                });
-
             modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionItem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -223,56 +203,6 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                     b.ToTable("ProductionItems");
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionItemHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ArchiveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ArchiveState")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ArchivedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrderNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ProductionGroupHistoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductionItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RalGalv")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("State")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductionGroupHistoryId");
-
-                    b.ToTable("ArchivedProductionItems");
-                });
-
             modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionItem", b =>
                 {
                     b.HasOne("Erfa.PruductionManagement.Domain.Entities.Item", "Item")
@@ -288,19 +218,7 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionItemHistory", b =>
-                {
-                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.ProductionGroupHistory", null)
-                        .WithMany("ProductionItems")
-                        .HasForeignKey("ProductionGroupHistoryId");
-                });
-
             modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionGroup", b =>
-                {
-                    b.Navigation("ProductionItems");
-                });
-
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionGroupHistory", b =>
                 {
                     b.Navigation("ProductionItems");
                 });

@@ -6,7 +6,10 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveI
     {
         public ArchiveItemCommandValidator()
         {
-            RuleFor(p => p.ProductNumber).NotEmpty().WithMessage("{PropertyName} is required.")
+            RuleFor(p => p.UserName).NotNull().NotEmpty()
+                .WithMessage("Headers are missing {PropertyName}.");
+            RuleFor(p => p.ProductNumber).NotEmpty()
+                .WithMessage("{PropertyName} is required.")
                .NotNull();
         }
     }

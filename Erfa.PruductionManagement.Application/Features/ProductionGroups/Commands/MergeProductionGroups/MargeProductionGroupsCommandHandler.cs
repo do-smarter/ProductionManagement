@@ -3,7 +3,6 @@ using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.Services;
 using Erfa.PruductionManagement.Domain.Entities;
-using Erfa.PruductionManagement.Domain.Enums;
 using FluentValidation.Results;
 using MediatR;
 
@@ -27,6 +26,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
 
         public async Task<ProductionGroupVm> Handle(MargeProductionGroupsCommand request, CancellationToken cancellationToken)
         {
+            var user = "Magdalena";
             var validator = new MargeProductionGroupsCommandValidator();
             await ProductionService.ValidateRequest(request, validator);
 
@@ -77,17 +77,9 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
             ProductionGroup result = new ProductionGroup();
             result.Priority = priority;
             result.ProductionItems.Add(productionItem);
-        
-            var changes = await _productionService.MergePriorities(result, groups);
-
-
-
-            List<string> ll = new List<string>() { "a", "b", "c" };
-            ll.Insert(ll.Count, "z");
-            ll.ForEach(z => { Console.WriteLine(z); });
-
-
-
+            
+            await _productionService.MergePriorities(result, groups, user);
+                       
             return _mapper.Map<ProductionGroupVm>(result);
         }
     }

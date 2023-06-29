@@ -1,10 +1,12 @@
-﻿using Erfa.PruductionManagement.Application.Features.Items;
+﻿using Erfa.PruductionManagement.Api.RequestModels;
+using Erfa.PruductionManagement.Application.Features.Items;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveItem;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRangeItems;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem;
 using Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemDetails;
 using Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemList;
+using Erfa.PruductionManagement.Application.RequestModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,41 +45,53 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
 
         [HttpPost("CreateItem", Name = "CreateNewItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<string>> CreateNewItem([FromBody] CreateItemCommand command)
+        public async Task<ActionResult<string>> CreateNewItem([FromBody] CreateItemRequestModel request)
         {
-            var result = await _mediator.Send(command);
+            string userName = Utils.GetUserName(Request);
+
+            var result = await _mediator.Send(new CreateItemCommand(request, userName));
             return Ok(result);
         }
 
         [HttpPost("CreateItemRange", Name = "CreateRangeOfNewItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<string>>> CreateRangeOfItems([FromBody] CreateRangeItemsCommand command)
+        public async Task<ActionResult<List<string>>> CreateRangeOfItems([FromBody] List<CreateItemRequestModel> request)
         {
-            var result = await _mediator.Send(command);
+            string userName = Utils.GetUserName(Request);
+
+            var result = await _mediator.Send(new CreateRangeItemsCommand(request, userName));
             return Ok(result);
         }
 
         [HttpPut("EditItem", Name = "EditItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> EditItem([FromBody] EditItemCommand command)
+        public async Task<ActionResult> EditItem([FromBody] EditItemRequestModel request)
         {
-            var result = await _mediator.Send(command);
+            string userName = Utils.GetUserName(Request);
+
+            var result = await _mediator.Send(new EditItemCommand(request, userName));
             return Ok(result);
         }
 
         [HttpPut("ArchiveItem", Name = "ArchiveItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> ArchiveItem([FromBody] ArchiveItemCommand command)
+        public async Task<ActionResult> ArchiveItem([FromBody] ArchiveItemRequestModel request)
         {
-            var result = await _mediator.Send(command);
+            string userName = Utils.GetUserName(Request);
+
+            var result = await _mediator.Send(new ArchiveItemCommand(request, userName));
             return Ok(result);
         }
     }

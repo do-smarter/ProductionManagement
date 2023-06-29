@@ -4,6 +4,7 @@ using Erfa.ProductionManagement.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Erfa.ProductionManagement.Persistance.Migrations
 {
     [DbContext(typeof(ErfaDbContext))]
-    partial class ErfaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230628215333_ProductionGroup_and_Hitosty_V4")]
+    partial class ProductionGroup_and_Hitosty_V4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

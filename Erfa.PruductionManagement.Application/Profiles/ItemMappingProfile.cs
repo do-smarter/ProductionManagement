@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Erfa.PruductionManagement.Api.RequestModels;
 using Erfa.PruductionManagement.Application.Features.Items;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem;
@@ -10,7 +11,7 @@ namespace Erfa.PruductionManagement.Application.Profiles
     {
         public ItemMappingProfile()
         {
-            CreateMap<CreateItemCommand, Item>();
+            CreateMap<CreateItemRequestModel, Item>();
             CreateMap<EditItemCommand, Item>();
             CreateMap<Item, ItemVm>().ReverseMap();
             CreateMap<Item, ItemHistory>();

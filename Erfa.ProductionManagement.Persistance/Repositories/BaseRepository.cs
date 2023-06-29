@@ -1,5 +1,4 @@
 ﻿using Erfa.PruductionManagement.Application.Contracts.Persistance;
-using Erfa.PruductionManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Erfa.ProductionManagement.Persistance.Repositories
@@ -32,6 +31,12 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteRangeAsync(IEnumerable<T> entity)
+        {
+            _dbContext.Set<T>().RemoveRange(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<T> GetByIdAsync(Guid id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
@@ -50,13 +55,10 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
 
         public async Task<int> UpdateRangeAsync(IEnumerable<T> entities)
         {
-            foreach (var entity in entities)
-            {
-                _dbContext.Entry(entity).State = EntityState.Modified;
 
-            }
-            _dbContext.UpdateRange(entities);
+            _dbContext.Set<T>().UpdateRange(entities);
             return await _dbContext.SaveChangesAsync();
+           
 
         }
     }

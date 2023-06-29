@@ -8,6 +8,5 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups
         public Guid Id { get; set; }
         public List<ProductionItemVm> ProductionItems { get; set; } = new List<ProductionItemVm>();
         public int Priority { get; set; }
-        public string GroupState { get; set; } = string.Empty;
     }
 }

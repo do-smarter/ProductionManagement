@@ -1,10 +1,9 @@
 ﻿using Erfa.PruductionManagement.Domain.Common;
 using Erfa.PruductionManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace Erfa.ProductionManagement.Persistance
-{      
+{
     public class ErfaDbContext : DbContext
     {
         public ErfaDbContext(DbContextOptions<ErfaDbContext> options) : base(options)
@@ -15,6 +14,8 @@ namespace Erfa.ProductionManagement.Persistance
         public DbSet<ProductionItem> ProductionItems { get; set; }
         public DbSet<ProductionGroup> ProductionGroups { get; set; }
         public DbSet<ItemHistory> ArchivedItems { get; set; }
+        public DbSet<ProductionItemHistory> ArchivedProductionItems { get; set; }
+        public DbSet<ProductionGroupHistory> ArchivedProductionGroupss { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -152,9 +153,9 @@ namespace Erfa.ProductionManagement.Persistance
             };
             List<ProductionGroup> prodList = new List<ProductionGroup> { pc1, pc2, pc3 };
 
-            modelBuilder.Entity<Item>().HasKey( "ProductNumber");
             modelBuilder.Entity<Item>().HasData(i1, i2);
-                       
+
+            modelBuilder.Entity<Item>().HasKey("ProductNumber");
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -177,7 +178,7 @@ namespace Erfa.ProductionManagement.Persistance
                 {
                     case EntityState.Added:
                         entry.Entity.ArchiveDate = DateTime.Now;
-                        break;                    
+                        break;
                 }
             }
             return base.SaveChangesAsync(cancellationToken);

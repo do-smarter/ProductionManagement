@@ -9,7 +9,6 @@ namespace Erfa.PruductionManagement.Domain.Entities
         public Guid Id { get; set; } = new Guid();
         public List<ProductionItem> ProductionItems { get; set; } = new List<ProductionItem>();
         public int Priority { get; set; }
-        public ProductionState GroupState { get; set; } = ProductionState.New;
     }
 
 }

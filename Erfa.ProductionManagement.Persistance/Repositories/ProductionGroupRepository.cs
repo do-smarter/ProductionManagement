@@ -10,6 +10,27 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
         {
         }
 
+        public async Task<ProductionGroup> MergeGroup(ProductionGroup resultProductionGroup,
+                                                         List<ProductionGroup> mergedProductionGroups,
+                                                         List<ProductionGroupHistory> mergedProductionGroupsHistories)
+
+        {
+            _dbContext.ProductionGroups.Add(resultProductionGroup);
+            _dbContext.ProductionGroups.RemoveRange(mergedProductionGroups);
+            foreach (var productionGroup in mergedProductionGroups)
+            {
+                _dbContext.ProductionItems.RemoveRange(productionGroup.ProductionItems);
+            }
+
+            _dbContext.ArchivedProductionGroupss.Include(productionGroup => productionGroup.ProductionItems);
+            _dbContext.ArchivedProductionGroupss.AddRange(mergedProductionGroupsHistories);
+            
+            await _dbContext.SaveChangesAsync();
+
+            return resultProductionGroup;
+
+        }
+
         public async Task<ProductionGroup> FindGroupWithLowestPriority()
         {
             var group = await _dbContext.ProductionGroups
@@ -24,15 +45,17 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
                                          .Where(e => ids.Contains(e.Id))
                                          .Include(e => e.ProductionItems)
                                          .ThenInclude(e => e.Item)
-                                         .OrderByDescending(e => e.Priority)
+                                         .OrderBy(e => e.Priority)
                                          .ToListAsync();
             return groups;
         }
 
-        public async Task<List<ProductionGroup>> ListAllOrderByPriority()
+        public async Task<List<ProductionGroup>> ListAllGroupsOrderedByPriority()
         {
             var groups = await _dbContext.ProductionGroups
-                                         .OrderByDescending(g => g.Priority)
+                                         .Include(e => e.ProductionItems)
+                                         .ThenInclude(e => e.Item)
+                                         .OrderBy(g => g.Priority)
                                          .ToListAsync();
             return groups;
         }

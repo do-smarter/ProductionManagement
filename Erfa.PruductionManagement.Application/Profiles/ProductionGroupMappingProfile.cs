@@ -8,8 +8,12 @@ namespace Erfa.PruductionManagement.Application.Profiles
     {
         public ProductionGroupMappingProfile()
         {
-            CreateMap<ProductionGroup, ProductionGroupVm>().
-                 ForMember(vm => vm.GroupState, pg => pg.MapFrom(e => e.GroupState.ToString()));
+            CreateMap<ProductionGroup, ProductionGroupVm>();
+            CreateMap<ProductionGroup, ProductionGroupHistory>()
+                .ForMember(pgh => pgh.ProductionGroupId, pg => pg.MapFrom(pg => pg.Id))
+                .ForMember(pgh => pgh.ProductionItems, pg => pg.MapFrom(pg => pg.ProductionItems))
+                ;
+                 
         }
     }
 }

@@ -29,6 +29,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateIt
             await ProductionService.ValidateRequest(request, validator);
 
             Item item = _mapper.Map<Item>(request);
+            item.CreatedBy = request.UserName;
             try
             {
                 await _itemRepository.AddAsync(item);

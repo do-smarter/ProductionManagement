@@ -5,10 +5,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemDe
     public class GetItemDetailsQuery : IRequest<ItemVm>
     {
         public string ProductNumber { get; internal set; } = string.Empty;
-        public GetItemDetailsQuery()
-        {
-
-        }
+        public GetItemDetailsQuery() { }
 
         public GetItemDetailsQuery(string productNumber)
         {

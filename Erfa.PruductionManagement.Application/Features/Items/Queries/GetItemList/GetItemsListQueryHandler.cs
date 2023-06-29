@@ -19,7 +19,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemLi
 
         public async Task<List<ItemVm>> Handle(GetItemsListQuery request, CancellationToken cancellationToken)
         {
-            var allItems = (await _itemRepository.ListAllAsync()).OrderBy(x => x.ProductNumber);
+            var allItems = (await _itemRepository.ListAllAsync()).OrderBy(x => x.ProductNumber).ToList();
             return _mapper.Map<List<ItemVm>>(allItems);
         }
     }
