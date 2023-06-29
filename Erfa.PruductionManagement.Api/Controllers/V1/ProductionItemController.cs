@@ -4,6 +4,7 @@ using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.Ch
 using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.CreateProductionItem;
 using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.EditProductionItem;
 using Erfa.PruductionManagement.Application.Features.ProductionItems.Queries;
+using Erfa.PruductionManagement.Application.RequestModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,6 +37,8 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Guid>> CreateNewProductionItem([FromBody] CreateProductionItemCommand request)
         {
+            string userName = Utils.GetUserName(Request);
+
             var result = await _mediator.Send(request);
             return Ok(result);
         }
@@ -49,13 +52,15 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             var result = await _mediator.Send(request);
             return Ok(result);
         }
-        [HttpPost("ChangeProductionItemState", Name = "Change Production Item's State")]
+        [HttpPut("ChangeProductionItemState", Name = "Change Production Item's State")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> State([FromBody] ChangeProductionItemStateCommand request)
+        public async Task<ActionResult> State([FromBody] ChangeProductionItemStateRequestModel request)
         {
-            var result = await _mediator.Send(request);
+            string userName = Utils.GetUserName(Request);
+
+            var result = await _mediator.Send(new ChangeProductionItemStateCommand(request, userName));
             return Ok(result);
         }
 
@@ -69,7 +74,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        
+
 
     }
 }

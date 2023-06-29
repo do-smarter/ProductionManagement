@@ -8,10 +8,12 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
     {
         public ChangeProductionItemStateCommandValidator()
         {
-            RuleFor(p => p.Id).NotNull().NotEmpty()
-                               .WithMessage("{PropertyName} is required.");
+            RuleFor(p => p.UserName).NotNull().NotEmpty()
+                .WithMessage("Headers are missing {PropertyName}.");
+            RuleFor(p => p.ProductionItemId).NotNull().NotEmpty()
+                .WithMessage("{PropertyName} is required.");
             RuleFor(p => p.State).IsEnumName(typeof(ProductionState), false)
-                                .WithMessage(ProductionService.ProductionStatesListValidationMsg());
+                .WithMessage(ProductionService.ProductionStatesListValidationMsg());
         }
     }
 }
