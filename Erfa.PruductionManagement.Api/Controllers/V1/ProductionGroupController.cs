@@ -6,6 +6,7 @@ using Erfa.PruductionManagement.Application.Features.ProductionGroups.Queries.Ge
 using Erfa.PruductionManagement.Application.RequestModels;
 using Erfa.PruductionManagement.Application.Features.ProductionGroups.Commands.CreateProductionGroup;
 using Erfa.PruductionManagement.Application.Features.ProductionGroups.Commands.TakeDownProductionGroup;
+using Erfa.PruductionManagement.Application.Features.ProductionGroups.Commands.UniteProductionGroupsPriority;
 
 namespace Erfa.PruductionManagement.Api.Controllers.V1
 {
@@ -69,6 +70,19 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             var result = await _mediator.Send(new TakeDownProductionGroupCommand(request, userName));
             return Ok(result);
         }
-    }
 
+        [HttpPut("UniteProductionGroupsPriority", Name = "Unite Productio nGroups Priority")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ProductionGroupVm>> UniteProductionGroupsPriority(
+                                                                   [FromBody] UniteProductionGroupsPriorityRequestModel request,
+                                                                   [FromHeader] ApiHeaders apiHeaders)
+        {
+            string userName = apiHeaders.UserName;
+
+            var result = await _mediator.Send(new UniteProductionGroupsPriorityCommand(request, userName));
+            return Ok(result);
+        }
+    }
 }

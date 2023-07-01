@@ -1,6 +1,7 @@
 ﻿using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Erfa.ProductionManagement.Persistance.Repositories
 {
@@ -28,7 +29,6 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
             await _dbContext.SaveChangesAsync();
 
             return resultProductionGroup;
-
         }
 
         public async Task<ProductionGroup> FindGroupWithLowestPriority()
@@ -60,12 +60,22 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
             return groups;
         }
 
-        public async Task<ProductionGroup> AddProductionGroupWithProductionItems(ProductionGroup entiy)
+        public async Task<ProductionGroup> AddProductionGroupWithProductionItems(ProductionGroup entiy, ProductionGroupHistory history)
         {
             _dbContext.ProductionGroups.Add(entiy);
             _dbContext.ProductionGroups.Include(entity => entity.ProductionItems);
+            _dbContext.ArchivedProductionGroups.Add(history);
+            _dbContext.ArchivedProductionGroups.Include(history => history.ProductionItems);
             await _dbContext.SaveChangesAsync();
             return entiy;
+        }
+
+        public async Task<List<ProductionGroup>> AddRangeProductionGroupWithProductionItems(List<ProductionGroup> entities)
+        {
+            _dbContext.ProductionGroups.AddRange(entities);
+            _dbContext.ProductionGroups.Include(entity => entity.ProductionItems);
+            await _dbContext.SaveChangesAsync();
+            return entities;
         }
     }
 }

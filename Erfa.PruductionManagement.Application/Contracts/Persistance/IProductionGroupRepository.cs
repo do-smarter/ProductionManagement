@@ -10,7 +10,9 @@ namespace Erfa.PruductionManagement.Application.Contracts.Persistance
         Task<ProductionGroup> MergeGroup(ProductionGroup resultProductionGroup,
                                          List<ProductionGroup> mergedProductionGroups,
                                          List<ProductionGroupHistory> mergedProductionGroupsHistories);
-        Task<ProductionGroup> AddProductionGroupWithProductionItems(ProductionGroup entiy);
+        Task<ProductionGroup> AddProductionGroupWithProductionItems(ProductionGroup entiy, ProductionGroupHistory history);
+        Task<List<ProductionGroup>> AddRangeProductionGroupWithProductionItems(List<ProductionGroup> entities);
 
     }
+
 }

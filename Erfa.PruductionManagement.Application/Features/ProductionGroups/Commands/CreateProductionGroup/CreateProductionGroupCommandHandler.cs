@@ -4,6 +4,7 @@ using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.RequestModels;
 using Erfa.PruductionManagement.Application.Services;
 using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Enums;
 using MediatR;
 
 namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Commands.CreateProductionGroup
@@ -13,17 +14,20 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
         private readonly IAsyncRepository<ProductionItem> _productionItemRepository;
         private readonly IProductionGroupRepository _productionGroupRepository;
         private readonly IItemRepository _itemRepository;
+        private readonly IAsyncRepository<ProductionGroupHistory> _productionGroupHistoryRepository;
         private readonly IMapper _mapper;
         private readonly ProductionService _productionService;
 
         public CreateProductionGroupCommandHandler(IAsyncRepository<ProductionItem> productionItemRepository,
                                                    IProductionGroupRepository productionGroupRepository,
+                                                   IAsyncRepository<ProductionGroupHistory> productionGroupHistoryRepository,
                                                    IItemRepository itemRepository,
                                                    IMapper mapper, ProductionService productionService)
         {
             _productionItemRepository = productionItemRepository;
             _productionGroupRepository = productionGroupRepository;
             _itemRepository = itemRepository;
+            _productionGroupHistoryRepository = productionGroupHistoryRepository;
             _mapper = mapper;
             _productionService = productionService;
         }
@@ -57,9 +61,14 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
                 productionItem.LastModifiedBy = request.UserName;
                 productionGroup.ProductionItems.Add(productionItem);
             }
+
+            var histories = _productionService.PrepareProductionGroupHistoreis(new List<ProductionGroup>() { productionGroup }, request.UserName, ArchiveState.Created);
             try
             {
-                await _productionGroupRepository.AddProductionGroupWithProductionItems(productionGroup);
+                await _productionGroupRepository.AddProductionGroupWithProductionItems(productionGroup, histories.First());
+
+
+
             }
             catch { throw new PersistanceFailedException(nameof(productionGroup), request); }
 

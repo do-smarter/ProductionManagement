@@ -36,7 +36,10 @@ namespace Erfa.PruductionManagement.Application.Services
 
             try
             {
-                await _groupRepository.MergeGroup(created, mergedProductionGroups, productionGroupHistories);
+                await _groupRepository.MergeGroup(created, mergedProductionGroups, productionGroupHistories).ContinueWith(
+
+                   e => UpdatePriorities()
+                   );
             }
             catch
             {
@@ -58,7 +61,6 @@ namespace Erfa.PruductionManagement.Application.Services
             foreach (var productionGroup in productionGroups)
             {
                 ProductionGroupHistory productionGroupHistory = _mapper.Map<ProductionGroupHistory>(productionGroup);
-                productionGroupHistory.ArchiveState = ArchiveState.Merged;
                 productionGroupHistory.ArchivedBy = user;
                 productionGroupHistory.ArchiveState = archiveState;
                 foreach (var productionItemHistory in productionGroupHistory.ProductionItems)
@@ -81,6 +83,46 @@ namespace Erfa.PruductionManagement.Application.Services
             return group.Priority;
         }
 
+        internal async Task UpdatePriorities()
+        {
+            List<ProductionGroup> groups = await _groupRepository.ListAllGroupsOrderedByPriority();
+            foreach (var group in groups)
+            {
+                group.Priority = groups.IndexOf(group) + 1;
+            }
+
+            await _groupRepository.UpdateRangeAsync(groups);
+        }
+
+        internal async Task ChangeSingleProductionGroupPriority(ProductionGroup productionGroup, int priority)
+        {
+            List<ProductionGroup> groups = await _groupRepository.ListAllGroupsOrderedByPriority();
+            groups.Remove(productionGroup);
+            groups.Insert(priority - 1, productionGroup);
+            foreach (var group in groups)
+            {
+                group.Priority = groups.IndexOf(group) + 1;
+            }
+
+            await _groupRepository.UpdateRangeAsync(groups);
+        }
+        internal async Task AddSingleProductionGroupPriority(ProductionGroup productionGroup, int priority)
+        {
+            List<ProductionGroup> groups = await _groupRepository.ListAllGroupsOrderedByPriority();
+            if (priority < groups.Count)
+            {
+                groups.Insert(priority - 1, productionGroup);
+                foreach (var group in groups)
+                {
+                    group.Priority = groups.IndexOf(group) + 1;
+                }
+            }
+            else { groups.Add(productionGroup); }
+
+            await _groupRepository.AddRangeProductionGroupWithProductionItems(groups);
+        }
+
+        
         internal bool EqalProductItems(List<ProductionItem> productionItems)
         {
             if (productionItems.Count == 0) { return false; }

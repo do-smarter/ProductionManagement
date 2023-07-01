@@ -6,5 +6,6 @@ namespace Erfa.PruductionManagement.Application.Contracts.Persistance
     {
         Task<Item> GetByProductNumber(string ProductNumber);
         Task<List<Item>> FindListOfItemsByProductNumbers(HashSet<string> productNumberds);
+
     }
 }

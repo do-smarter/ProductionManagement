@@ -13,6 +13,8 @@ namespace Erfa.ProductionManagement.Persistance
 
             services.AddDbContext<ErfaDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ErfaProdConnString")));
+            services.AddDbContext<ErfaArchiveDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("ErfaProdConnString")));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
 
             services.AddScoped<IItemRepository, ItemRepository>();
