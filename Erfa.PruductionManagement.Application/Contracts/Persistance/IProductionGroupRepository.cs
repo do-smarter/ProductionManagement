@@ -8,11 +8,10 @@ namespace Erfa.PruductionManagement.Application.Contracts.Persistance
         Task<List<ProductionGroup>> FindListOfGroupsByIds(HashSet<Guid> ids);
         Task<List<ProductionGroup>> ListAllGroupsOrderedByPriority();
         Task<ProductionGroup> MergeGroup(ProductionGroup resultProductionGroup,
-                                         List<ProductionGroup> mergedProductionGroups,
-                                         List<ProductionGroupHistory> mergedProductionGroupsHistories);
-        Task<ProductionGroup> AddProductionGroupWithProductionItems(ProductionGroup entiy, ProductionGroupHistory history);
+                                         List<ProductionGroup> mergedProductionGroups);
+        Task<ProductionGroup> AddProductionGroupWithProductionItems(ProductionGroup entiy);
         Task<List<ProductionGroup>> AddRangeProductionGroupWithProductionItems(List<ProductionGroup> entities);
-
+        Task DeleteRangeProductionGroups(List<ProductionGroup> productionGroups);
     }
 
 }

@@ -6,7 +6,7 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
 {
     public class ProductionItemRepository : BaseRepository<ProductionItem>, IProductionItemRepository
     {
-        public ProductionItemRepository(ErfaDbContext dbContext) : base(dbContext)
+        public ProductionItemRepository(ErfaProductionDbContext dbContext) : base(dbContext)
         {
         }
 

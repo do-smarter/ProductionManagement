@@ -1,20 +1,17 @@
 ﻿using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 
 namespace Erfa.ProductionManagement.Persistance.Repositories
 {
     public class ProductionGroupRepository : BaseRepository<ProductionGroup>, IProductionGroupRepository
     {
-        public ProductionGroupRepository(ErfaDbContext dbContext) : base(dbContext)
+        public ProductionGroupRepository(ErfaProductionDbContext dbContext) : base(dbContext)
         {
         }
 
         public async Task<ProductionGroup> MergeGroup(ProductionGroup resultProductionGroup,
-                                                         List<ProductionGroup> mergedProductionGroups,
-                                                         List<ProductionGroupHistory> mergedProductionGroupsHistories)
-
+                                                         List<ProductionGroup> mergedProductionGroups)
         {
             _dbContext.ProductionGroups.Add(resultProductionGroup);
             _dbContext.ProductionGroups.RemoveRange(mergedProductionGroups);
@@ -22,10 +19,6 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
             {
                 _dbContext.ProductionItems.RemoveRange(productionGroup.ProductionItems);
             }
-
-            _dbContext.ArchivedProductionGroups.Include(productionGroup => productionGroup.ProductionItems);
-            _dbContext.ArchivedProductionGroups.AddRange(mergedProductionGroupsHistories);
-
             await _dbContext.SaveChangesAsync();
 
             return resultProductionGroup;
@@ -60,12 +53,10 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
             return groups;
         }
 
-        public async Task<ProductionGroup> AddProductionGroupWithProductionItems(ProductionGroup entiy, ProductionGroupHistory history)
+        public async Task<ProductionGroup> AddProductionGroupWithProductionItems(ProductionGroup entiy)
         {
             _dbContext.ProductionGroups.Add(entiy);
             _dbContext.ProductionGroups.Include(entity => entity.ProductionItems);
-            _dbContext.ArchivedProductionGroups.Add(history);
-            _dbContext.ArchivedProductionGroups.Include(history => history.ProductionItems);
             await _dbContext.SaveChangesAsync();
             return entiy;
         }
@@ -76,6 +67,14 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
             _dbContext.ProductionGroups.Include(entity => entity.ProductionItems);
             await _dbContext.SaveChangesAsync();
             return entities;
+        }
+
+        public async Task DeleteRangeProductionGroups(List<ProductionGroup> productionGroups)
+        {
+            productionGroups.ForEach(prod => _dbContext.RemoveRange(prod.ProductionItems));
+            _dbContext.ProductionGroups.RemoveRange(productionGroups);
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -12,7 +12,8 @@ namespace Erfa.PruductionManagement.Application.Profiles
         public ItemMappingProfile()
         {
             CreateMap<CreateItemRequestModel, Item>();
-            CreateMap<EditItemCommand, Item>();
+            CreateMap<EditItemCommand, Item>().
+                ForMember(i => i.LastModifiedBy, e => e.MapFrom(eic => eic.UserName));
             CreateMap<Item, ItemVm>().ReverseMap();
             CreateMap<Item, ItemHistory>();
         }

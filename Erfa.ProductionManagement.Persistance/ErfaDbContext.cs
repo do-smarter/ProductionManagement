@@ -10,10 +10,14 @@ namespace Erfa.ProductionManagement.Persistance
         {
 
         }
+
         public DbSet<Item> Items { get; set; }
         public DbSet<ProductionItem> ProductionItems { get; set; }
         public DbSet<ProductionGroup> ProductionGroups { get; set; }
-       
+        public DbSet<ItemHistory> ArchivedItems { get; set; }
+        public DbSet<ProductionItemHistory> ArchivedProductionItems { get; set; }
+        public DbSet<ProductionGroupHistory> ArchivedProductionGroups { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

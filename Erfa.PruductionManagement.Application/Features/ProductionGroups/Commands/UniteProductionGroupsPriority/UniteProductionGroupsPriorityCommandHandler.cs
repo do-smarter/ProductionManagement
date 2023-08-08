@@ -33,33 +33,43 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
 
             HashSet<Guid> uniqeGroups = new HashSet<Guid>(request.ProductionGroupIds);
 
-            List<ProductionGroup> mergedProductionGroups = await _productionGroupRepository.FindListOfGroupsByIds(uniqeGroups);
+            List<ProductionGroup> productionGroups = await _productionGroupRepository.FindListOfGroupsByIds(uniqeGroups);
 
-            if (mergedProductionGroups.Count != uniqeGroups.Count)
+            if (productionGroups.Count != uniqeGroups.Count)
             {
                 string ids = String.Join(", or ", uniqeGroups.ToArray());
                 throw new ResourceNotFoundException(nameof(ProductionGroup), ids);
             }
 
-            var histories = _productionService.PrepareProductionGroupHistoreis(mergedProductionGroups,
-                                                                               request.UserName,
-                                                                               ArchiveState.Archived);
 
             ProductionGroup result = new ProductionGroup();
-            mergedProductionGroups.ForEach(g => result.ProductionItems.AddRange(g.ProductionItems));
+            try
+            {
+                await _productionGroupRepository.DeleteRangeProductionGroups(productionGroups);
+
+                result.Priority = await _productionService.AddSingleProductionGroupPriority(result, request.Priority);
+            }
+            catch (Exception ex)
+            {
+                throw new PersistanceFailedException(nameof(ProductionGroup),
+                                                    string.Join(", ", request.ProductionGroupIds.ToArray()));
+            }
+            var mergedProductionItems = MergeProductionItems(productionGroups, request.UserName);
+
+            result.ProductionItems = mergedProductionItems[0];
             result.CreatedBy = request.UserName;
             result.LastModifiedBy = request.UserName;
 
+            var histories = _productionService.PrepareProductionGroupHistoreis(productionGroups,
+                                                                                           request.UserName,
+                                                                                           ArchiveState.United);
+            var x = 1;
             try
             {
-                await _archiveProductionGroupRepository.ArchiveRangeProductionGroup(histories)
-                    .ContinueWith(async r => await _productionGroupRepository.DeleteRangeAsync(mergedProductionGroups))
-                    .ContinueWith(async r => await _productionService.AddSingleProductionGroupPriority(result, request.Priority));
-
-
-                // TODO: AddingNewEventArgs METHOD IN REPOSITORY TO HANDLE ALL THE CHANGES
+                await _productionGroupRepository.AddAsync(result);
+                await _archiveProductionGroupRepository.ArchiveRangeProductionGroup(histories);
             }
-            catch
+            catch (Exception ex)
             {
                 throw new PersistanceFailedException(nameof(ProductionGroup),
                                                     string.Join(", ", request.ProductionGroupIds.ToArray()));
@@ -68,5 +78,39 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
 
             return _mapper.Map<ProductionGroupVm>(result);
         }
+        public List<ProductionItem>[] MergeProductionItems(List<ProductionGroup> productionGroups, string UserName)
+        {
+            List<ProductionItem> allProdctionItems = new List<ProductionItem>();
+
+            productionGroups.ForEach(g => allProdctionItems.AddRange(g.ProductionItems));
+
+            var mergedProductionItems = new List<ProductionItem>();
+
+            int i = allProdctionItems.Count - 1;
+            while (i > 0)
+            {
+                for (int j = i - 1; j >= 0; j--)
+                {
+
+                    if (allProdctionItems[i].EqualsForProductionGroup(allProdctionItems[j]))
+                    {
+                        allProdctionItems[i] = new ProductionItem(allProdctionItems[i]);
+                        allProdctionItems[i].Comment = $"{allProdctionItems[i].Comment}, {allProdctionItems[j].Comment}.";
+                        allProdctionItems[i].OrderNumber = $"{allProdctionItems[i].OrderNumber}, {allProdctionItems[j].OrderNumber}.";
+                        allProdctionItems[i].Quantity += allProdctionItems[j].Quantity;
+                        allProdctionItems[i].LastModifiedBy = UserName;
+                        allProdctionItems[i].CreatedBy = UserName;
+                        mergedProductionItems.Add(allProdctionItems[i - 1]);
+                        allProdctionItems.RemoveAt(j);
+                        i--;
+                    }
+                }
+                i--;
+            }
+            List<ProductionItem>[] result = { allProdctionItems, mergedProductionItems };
+
+            return result;
+        }
+
     }
 }

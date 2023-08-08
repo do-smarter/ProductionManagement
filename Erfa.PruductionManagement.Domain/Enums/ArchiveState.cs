@@ -4,6 +4,7 @@
     {
         Created,
         Merged,
+        United,
         Changed,
         Archived,
     }

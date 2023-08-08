@@ -37,6 +37,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateIt
 
             Item item = _mapper.Map<Item>(request);
             item.CreatedBy = request.UserName;
+            item.LastModifiedBy = request.UserName;
 
             ItemHistory history = _mapper.Map<ItemHistory>(item);
             history.ArchivedBy = request.UserName;

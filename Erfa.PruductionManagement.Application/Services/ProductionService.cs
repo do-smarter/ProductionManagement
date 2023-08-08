@@ -12,19 +12,19 @@ namespace Erfa.PruductionManagement.Application.Services
         private readonly IProductionGroupRepository _groupRepository;
         private readonly IProductionItemRepository _productionItemRepository;
         private readonly IAsyncRepository<ProductionItemHistory> _productionItemHistoryRepository;
-        private readonly IAsyncRepository<ProductionGroupHistory> _productionGRoupHistoryRepository;
+        private readonly IArchiveProductionGroupRepository _archiveProductionGroupRepository;
         private readonly IMapper _mapper;
 
         public ProductionService(IProductionGroupRepository groupRepository,
                                  IProductionItemRepository productionItemRepository,
                                  IAsyncRepository<ProductionItemHistory> productionItemHistoryRepository,
-                                 IAsyncRepository<ProductionGroupHistory> productionGRoupHistoryRepository,
+                                 IArchiveProductionGroupRepository archiveProductionGroupRepository,
                                  IMapper mapper)
         {
             _groupRepository = groupRepository;
             _productionItemRepository = productionItemRepository;
             _productionItemHistoryRepository = productionItemHistoryRepository;
-            _productionGRoupHistoryRepository = productionGRoupHistoryRepository;
+            _archiveProductionGroupRepository = archiveProductionGroupRepository;
             _mapper = mapper;
         }
 
@@ -36,12 +36,12 @@ namespace Erfa.PruductionManagement.Application.Services
 
             try
             {
-                await _groupRepository.MergeGroup(created, mergedProductionGroups, productionGroupHistories).ContinueWith(
+                await _groupRepository.MergeGroup(created, mergedProductionGroups);
+                await _archiveProductionGroupRepository.ArchiveRangeProductionGroup(productionGroupHistories);
+                await UpdatePriorities();
 
-                   e => UpdatePriorities()
-                   );
             }
-            catch
+            catch (Exception ex)
             {
                 string ids = "";
                 foreach (ProductionGroup group in mergedProductionGroups)
@@ -78,7 +78,7 @@ namespace Erfa.PruductionManagement.Application.Services
             var group = await _groupRepository.FindGroupWithLowestPriority();
             if (group == null)
             {
-                return 1;
+                return 0;
             }
             return group.Priority;
         }
@@ -106,23 +106,34 @@ namespace Erfa.PruductionManagement.Application.Services
 
             await _groupRepository.UpdateRangeAsync(groups);
         }
-        internal async Task AddSingleProductionGroupPriority(ProductionGroup productionGroup, int priority)
+        internal async Task<int> AddSingleProductionGroupPriority(ProductionGroup productionGroup, int priority)
         {
             List<ProductionGroup> groups = await _groupRepository.ListAllGroupsOrderedByPriority();
+            var placeHolder = new ProductionGroup();
             if (priority < groups.Count)
             {
-                groups.Insert(priority - 1, productionGroup);
+                groups.Insert(priority - 1, placeHolder);
                 foreach (var group in groups)
                 {
                     group.Priority = groups.IndexOf(group) + 1;
                 }
             }
-            else { groups.Add(productionGroup); }
+            else
+            {
+                groups.Add(placeHolder);
+                productionGroup.Priority = groups.IndexOf(placeHolder) + 1;
+                foreach (var group in groups)
+                {
+                    group.Priority = groups.IndexOf(group) + 1;
+                }
+            }
+            groups.Remove(placeHolder);
 
-            await _groupRepository.AddRangeProductionGroupWithProductionItems(groups);
+            await _groupRepository.UpdateRangeAsync(groups);
+            return placeHolder.Priority;
         }
 
-        
+
         internal bool EqalProductItems(List<ProductionItem> productionItems)
         {
             if (productionItems.Count == 0) { return false; }
@@ -161,6 +172,39 @@ namespace Erfa.PruductionManagement.Application.Services
             productionItemHistory.ArchivedBy = userName;
             productionItemHistory.ArchiveState = archiveState;
             return await _productionItemHistoryRepository.AddAsync(productionItemHistory);
+        }
+        internal async Task ArchiveRangeProductionItem(List<ProductionItem> productionItemList, string userName, ArchiveState archiveState)
+        {
+            List<ProductionItemHistory> productionItemHistoryList = _mapper.Map<List<ProductionItemHistory>>(productionItemList);
+            foreach (var productionItemHistory in productionItemHistoryList)
+            {
+                productionItemHistory.ArchivedBy = userName;
+                productionItemHistory.ArchiveState = archiveState;
+            }
+
+            await _productionItemHistoryRepository.AddRangeAsync(productionItemHistoryList);
+        }
+
+        internal ProductionItem MergeProductionItems(List<ProductionItem> productionItems, string userName)
+        {
+            ProductionItem productionItem = new ProductionItem();
+            productionItem.Item = productionItems.First().Item;
+            productionItem.Quantity = productionItems.Sum(p => p.Quantity);
+            productionItem.RalGalv = productionItems[0].RalGalv;
+
+            HashSet<string> orders = new HashSet<string>();
+            HashSet<string> comments = new HashSet<string>();
+            foreach (ProductionItem item in productionItems)
+            {
+                orders.Add(item.OrderNumber);
+                string comment = item.Comment;
+                comments.Add(item.Comment);
+            }
+            productionItem.OrderNumber = String.Join(", ", orders);
+            productionItem.Comment = String.Join(", ", comments);
+            productionItem.CreatedBy = userName;
+            productionItem.LastModifiedBy = userName;
+            return productionItem;
         }
     }
 }

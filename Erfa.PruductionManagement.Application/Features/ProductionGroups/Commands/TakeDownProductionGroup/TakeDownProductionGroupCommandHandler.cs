@@ -68,12 +68,14 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
             try
             {
                 await _archiveProductionGroupRepository.ArchiveRangeProductionGroup(histories);
+                await _productionGroupRepository.DeleteRangeProductionGroups(productionGroups);
             }
-            catch
+            catch (Exception ex)
             {
                 throw new PersistanceFailedException(nameof(ProductionGroup),
                                                     string.Join(", ", request.ProductionGroupIds.ToArray()));
             }
+            
             return Unit.Value;
         }
     }

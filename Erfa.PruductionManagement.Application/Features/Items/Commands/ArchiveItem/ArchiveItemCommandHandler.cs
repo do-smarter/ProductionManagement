@@ -45,7 +45,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveI
                 await _itemHistoryRepository.AddAsync(history);
                 await _itemRepository.DeleteAsync(item);
             }
-            catch 
+            catch (Exception ex)
             {
                 throw new PersistanceFailedException(nameof(ItemHistory), request.ProductNumber);
             }

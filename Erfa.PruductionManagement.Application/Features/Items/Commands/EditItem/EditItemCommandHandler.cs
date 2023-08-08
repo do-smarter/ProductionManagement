@@ -32,12 +32,13 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
             await _productionService.ValidateRequest(request, validator);
 
             Item item = await _itemRepository.GetByProductNumber(request.ProductNumber);
-            Item updated = _mapper.Map<Item>(request);
-            updated.LastModifiedBy = request.UserName;
+
             if (item == null)
             {
                 throw new ResourceNotFoundException(nameof(Item), request.ProductNumber);
             }
+
+            Item updated = _mapper.Map<Item>(request);
             if (!item.Updated(updated))
             {
                 throw new EntityUpdateException(nameof(Item), request.ProductNumber);
@@ -54,7 +55,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
                 await _itemHistoryRepository.AddAsync(history);
                 await _itemRepository.UpdateAsync(item);
             }
-            catch
+            catch (Exception ex)
             {
                 throw new PersistanceFailedException(nameof(Item), request.ProductNumber);
             }
@@ -68,6 +69,8 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
             item.Description = command.Description;
             item.ProductWeight = command.ProductWeight;
             item.ProductionTimeSec = command.ProductionTimeSec;
+            item.LastModifiedBy = command.UserName;
+
             return item;
         }
     }

@@ -14,16 +14,19 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRa
     {
 
         private readonly IAsyncRepository<Item> _itemRepository;
+        private readonly IAsyncRepository<ItemHistory> _itemHistoryRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateItemCommandHandler> _logger;
         private readonly ProductionService _productionService;
 
         public CreateRangeItemsCommandHandler(IAsyncRepository<Item> itemRepository,
+                                              IAsyncRepository<ItemHistory> itemHistoryRepository,
                                               IMapper mapper,
                                               ILogger<CreateItemCommandHandler> logger,
                                               ProductionService productionService)
         {
             _itemRepository = itemRepository;
+            _itemHistoryRepository = itemHistoryRepository;
             _mapper = mapper;
             _logger = logger;
             _productionService = productionService;
@@ -41,9 +44,16 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRa
                 item.LastModifiedBy = request.UserName;
                 result.Add(item.ProductNumber);
             }
+            List<ItemHistory> histories = _mapper.Map<List<ItemHistory>>(items);
+            foreach (var history in histories)
+            {
+                history.ArchivedBy = request.UserName;
+                history.ArchiveState = Domain.Enums.ArchiveState.Created;
+            }
 
             try
             {
+                await _itemHistoryRepository.AddRangeAsync(histories);
                 await _itemRepository.AddRangeAsync(items);
                 return result;
             }

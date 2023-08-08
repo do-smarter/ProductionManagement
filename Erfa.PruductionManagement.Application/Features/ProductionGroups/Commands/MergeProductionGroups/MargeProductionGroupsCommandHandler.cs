@@ -57,33 +57,18 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
             }
 
             int priority = groups.First().Priority;
-            ProductionItem productionItem = new ProductionItem();
-            productionItem.Item = groups[0].ProductionItems.First().Item;
-            productionItem.Quantity = allProductionItems.Sum(p => p.Quantity);
-            productionItem.RalGalv = allProductionItems[0].RalGalv;
 
-            HashSet<string> orders = new HashSet<string>();
-            HashSet<string> comments = new HashSet<string>();
-            foreach (ProductionItem item in allProductionItems)
-            {
-                orders.Add(item.OrderNumber);
-                string comment = "O: " + item.OrderNumber + ": " + item.Comment;
-                comments.Add(item.Comment);
-            }
-            productionItem.OrderNumber = String.Join(", ", orders);
-            productionItem.Comment = String.Join(", ", comments);
-            productionItem.CreatedBy = request.UserName;
-            productionItem.LastModifiedBy = request.UserName;
+            var mergedProductionItem = _productionService.MergeProductionItems(allProductionItems, request.UserName);
 
             ProductionGroup result = new ProductionGroup();
             result.Priority = priority;
-            result.ProductionItems.Add(productionItem);
+            result.ProductionItems.Add(mergedProductionItem);
             result.CreatedBy = request.UserName;
             result.LastModifiedBy = request.UserName;
 
             await _productionService.MergePriorities(result, groups, request.UserName);
 
             return _mapper.Map<ProductionGroupVm>(result);
-        }
+        }        
     }
 }

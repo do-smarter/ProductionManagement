@@ -43,7 +43,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
                 await _productionService.ArchiveProductionItem(productionItem, request.UserName, ArchiveState.Changed);
                 await _productionItemRepository.UpdateAsync(productionItem);
             }
-            catch 
+            catch (Exception ex)
             {
                 throw new PersistanceFailedException(nameof(ProductionItem), request.ProductionItemId);
             }

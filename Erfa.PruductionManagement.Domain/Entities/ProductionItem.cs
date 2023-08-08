@@ -31,11 +31,14 @@ namespace Erfa.PruductionManagement.Domain.Entities
             OrderNumber = orderNumber;
             RalGalv = ralGalv.ToUpper();
         }
-
-        public ProductionItem(ProductionItem prodItem)
+        public ProductionItem(ProductionItem productionItem)
         {
-            Item = prodItem.Item;
-            RalGalv = prodItem.RalGalv.ToUpper();
+            Item = productionItem.Item;
+            Quantity = productionItem.Quantity;
+            OrderNumber = productionItem.OrderNumber;
+            RalGalv = productionItem.RalGalv;
+            Comment = productionItem.Comment;
+            State = ProductionState.New;
         }
 
         public bool EqualsForProductionGroup(object? obj)

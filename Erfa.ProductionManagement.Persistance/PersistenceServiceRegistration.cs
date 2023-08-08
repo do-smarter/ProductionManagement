@@ -10,8 +10,9 @@ namespace Erfa.ProductionManagement.Persistance
     {
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddDbContext<ErfaDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("ErfaProdConnString")));
+            services.AddDbContext<ErfaProductionDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ErfaProdConnString")));
             services.AddDbContext<ErfaArchiveDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("ErfaProdConnString")));
