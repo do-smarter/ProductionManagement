@@ -1,9 +1,8 @@
 ﻿using Erfa.PruductionManagement.Domain.Enums;
-using MediatR;
 
-namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.CreateProductionItem
+namespace Erfa.PruductionManagement.Application.RequestModels
 {
-    public class CreateProductionItemCommand : IRequest<Guid>
+    public class ProductionItemModel
     {
         public string ProductNumber { get; set; } = string.Empty;
         public int Quantity { get; set; }
@@ -11,6 +10,5 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
         public string RalGalv { get; set; } = string.Empty;
         public string Comment { get; set; } = string.Empty;
         public string State { get; set; } = ProductionState.New.ToString();
-        
     }
 }

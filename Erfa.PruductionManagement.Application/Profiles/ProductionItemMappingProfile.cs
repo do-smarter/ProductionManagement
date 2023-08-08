@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Erfa.PruductionManagement.Application.Features.ProductionItems;
-using Erfa.PruductionManagement.Application.Features.ProductionItems.Commands.CreateProductionItem;
+using Erfa.PruductionManagement.Application.RequestModels;
 using Erfa.PruductionManagement.Domain.Entities;
 
 namespace Erfa.PruductionManagement.Application.Profiles
@@ -9,8 +9,10 @@ namespace Erfa.PruductionManagement.Application.Profiles
     {
         public ProductionItemMappingProfile()
         {
-            CreateMap<CreateProductionItemCommand, ProductionItem>();
+            CreateMap<ProductionItemModel, ProductionItem>();
+
             CreateMap<ProductionItem, ProductionItemHistory>()
+                .ForMember(pih => pih.Id, e => e.MapFrom(i => Guid.NewGuid()))
                 .ForMember(pih => pih.ProductNumber, pi => pi.MapFrom(e => e.Item.ProductNumber))
                 .ForMember(pih => pih.ProductionItemId, pi => pi.MapFrom(e => e.Id))
                 .ForMember(pih => pih.State, pi => pi.MapFrom(e => e.State.ToString()));

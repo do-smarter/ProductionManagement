@@ -10,12 +10,14 @@ namespace Erfa.ProductionManagement.Persistance
         {
 
         }
+
         public DbSet<Item> Items { get; set; }
         public DbSet<ProductionItem> ProductionItems { get; set; }
         public DbSet<ProductionGroup> ProductionGroups { get; set; }
         public DbSet<ItemHistory> ArchivedItems { get; set; }
         public DbSet<ProductionItemHistory> ArchivedProductionItems { get; set; }
-        public DbSet<ProductionGroupHistory> ArchivedProductionGroupss { get; set; }
+        public DbSet<ProductionGroupHistory> ArchivedProductionGroups { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +33,6 @@ namespace Erfa.ProductionManagement.Persistance
                 Description = "Very nice piece of metal",
                 LastModifiedBy = user,
                 LastModifiedDate = DateTime.Now,
-                //Id = Guid.NewGuid(),
                 ProductionTimeSec = 100,
                 ProductNumber = "XYZ123",
                 ProductWeight = 100,
@@ -45,7 +46,6 @@ namespace Erfa.ProductionManagement.Persistance
                 Description = "Not so nice piece of metal",
                 LastModifiedBy = user,
                 LastModifiedDate = DateTime.Now,
-                // Id = Guid.NewGuid(),
                 ProductionTimeSec = 50,
                 ProductNumber = "ABC987",
                 ProductWeight = 50,

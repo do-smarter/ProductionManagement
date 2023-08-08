@@ -58,7 +58,7 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
 
             _dbContext.Set<T>().UpdateRange(entities);
             return await _dbContext.SaveChangesAsync();
-           
+
 
         }
     }

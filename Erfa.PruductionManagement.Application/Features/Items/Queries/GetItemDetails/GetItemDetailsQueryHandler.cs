@@ -12,23 +12,24 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemDe
 
         private readonly IItemRepository _itemRepository;
         private readonly IMapper _mapper;
-
-        public GetItemDetailsQueryHandler(IMapper mapper, IItemRepository itemRepository)
+        private readonly ProductionService _productionService;
+        public GetItemDetailsQueryHandler(IMapper mapper, IItemRepository itemRepository,
+                                          ProductionService productionService)
         {
             _mapper = mapper;
             _itemRepository = itemRepository;
+            _productionService = productionService;
         }
         public async Task<ItemVm> Handle(GetItemDetailsQuery request, CancellationToken cancellationToken)
         {
             var validator = new GetItemDetailsQueryValidator();
-            await ProductionService.ValidateRequest(request, validator);
+            await _productionService.ValidateRequest(request, validator);
 
             Item item = await _itemRepository.GetByProductNumber(request.ProductNumber);
             if (item == null)
             {
                 throw new ResourceNotFoundException(nameof(Item), request.ProductNumber);
             }
-
             return _mapper.Map<ItemVm>(item);
         }
     }

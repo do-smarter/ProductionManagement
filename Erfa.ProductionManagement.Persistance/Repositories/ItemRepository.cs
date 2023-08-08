@@ -7,8 +7,16 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
 
     public class ItemRepository : BaseRepository<Item>, IItemRepository
     {
-        public ItemRepository(ErfaDbContext dbContext) : base(dbContext)
+        public ItemRepository(ErfaProductionDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<List<Item>> FindListOfItemsByProductNumbers(HashSet<string> productNumbers)
+        {
+            var items = await _dbContext.Items
+                                         .Where(e => productNumbers.Contains(e.ProductNumber))                                         
+                                         .ToListAsync();
+            return items;
         }
 
         public async Task<Item> GetByProductNumber(string ProductNumber)

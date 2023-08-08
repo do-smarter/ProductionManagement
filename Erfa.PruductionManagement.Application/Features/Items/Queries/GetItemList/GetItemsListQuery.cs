@@ -1,5 +1,4 @@
-﻿using Erfa.PruductionManagement.Application.RequestModels;
-using MediatR;
+﻿using MediatR;
 
 namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemList
 {

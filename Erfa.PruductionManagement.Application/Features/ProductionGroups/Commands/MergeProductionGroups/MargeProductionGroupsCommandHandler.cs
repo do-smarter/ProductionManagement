@@ -26,11 +26,10 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
 
         public async Task<ProductionGroupVm> Handle(MargeProductionGroupsCommand request, CancellationToken cancellationToken)
         {
-            var user = "Magdalena";
             var validator = new MargeProductionGroupsCommandValidator();
-            await ProductionService.ValidateRequest(request, validator);
+            await _productionService.ValidateRequest(request, validator);
 
-            HashSet<Guid> uniqeGroups = new HashSet<Guid>(request.Groups);
+            HashSet<Guid> uniqeGroups = new HashSet<Guid>(request.ProductionGroupIds);
 
             List<ProductionGroup> groups = await _productionGroupRepository.FindListOfGroupsByIds(uniqeGroups);
 
@@ -56,31 +55,20 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
                         )
                     );
             }
-     
-            int priority = groups.First().Priority;
-            ProductionItem productionItem = new ProductionItem();
-            productionItem.Item = groups[0].ProductionItems.First().Item;
-            productionItem.Quantity = allProductionItems.Sum(p => p.Quantity);
-            productionItem.RalGalv = allProductionItems[0].RalGalv;
 
-            HashSet<string> orders = new HashSet<string>();
-            HashSet<string> comments = new HashSet<string>();
-            foreach (ProductionItem item in allProductionItems)
-            {
-                orders.Add(item.OrderNumber);
-                string comment = "O: " + item.OrderNumber + ": " + item.Comment;
-                comments.Add(item.Comment);
-            }
-            productionItem.OrderNumber = String.Join(", ", orders);
-            productionItem.Comment = String.Join(", ", comments);
+            int priority = groups.First().Priority;
+
+            var mergedProductionItem = _productionService.MergeProductionItems(allProductionItems, request.UserName);
 
             ProductionGroup result = new ProductionGroup();
             result.Priority = priority;
-            result.ProductionItems.Add(productionItem);
-            
-            await _productionService.MergePriorities(result, groups, user);
-                       
+            result.ProductionItems.Add(mergedProductionItem);
+            result.CreatedBy = request.UserName;
+            result.LastModifiedBy = request.UserName;
+
+            await _productionService.MergePriorities(result, groups, request.UserName);
+
             return _mapper.Map<ProductionGroupVm>(result);
-        }
+        }        
     }
 }

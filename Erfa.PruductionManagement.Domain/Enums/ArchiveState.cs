@@ -2,7 +2,10 @@
 {
     public enum ArchiveState
     {
+        Created,
+        Merged,
+        United,
+        Changed,
         Archived,
-        Changed
     }
 }

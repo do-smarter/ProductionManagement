@@ -6,14 +6,12 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
 {
     public class ProductionGroupRepository : BaseRepository<ProductionGroup>, IProductionGroupRepository
     {
-        public ProductionGroupRepository(ErfaDbContext dbContext) : base(dbContext)
+        public ProductionGroupRepository(ErfaProductionDbContext dbContext) : base(dbContext)
         {
         }
 
         public async Task<ProductionGroup> MergeGroup(ProductionGroup resultProductionGroup,
-                                                         List<ProductionGroup> mergedProductionGroups,
-                                                         List<ProductionGroupHistory> mergedProductionGroupsHistories)
-
+                                                         List<ProductionGroup> mergedProductionGroups)
         {
             _dbContext.ProductionGroups.Add(resultProductionGroup);
             _dbContext.ProductionGroups.RemoveRange(mergedProductionGroups);
@@ -21,14 +19,9 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
             {
                 _dbContext.ProductionItems.RemoveRange(productionGroup.ProductionItems);
             }
-
-            _dbContext.ArchivedProductionGroupss.Include(productionGroup => productionGroup.ProductionItems);
-            _dbContext.ArchivedProductionGroupss.AddRange(mergedProductionGroupsHistories);
-            
             await _dbContext.SaveChangesAsync();
 
             return resultProductionGroup;
-
         }
 
         public async Task<ProductionGroup> FindGroupWithLowestPriority()
@@ -58,6 +51,30 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
                                          .OrderBy(g => g.Priority)
                                          .ToListAsync();
             return groups;
+        }
+
+        public async Task<ProductionGroup> AddProductionGroupWithProductionItems(ProductionGroup entiy)
+        {
+            _dbContext.ProductionGroups.Add(entiy);
+            _dbContext.ProductionGroups.Include(entity => entity.ProductionItems);
+            await _dbContext.SaveChangesAsync();
+            return entiy;
+        }
+
+        public async Task<List<ProductionGroup>> AddRangeProductionGroupWithProductionItems(List<ProductionGroup> entities)
+        {
+            _dbContext.ProductionGroups.AddRange(entities);
+            _dbContext.ProductionGroups.Include(entity => entity.ProductionItems);
+            await _dbContext.SaveChangesAsync();
+            return entities;
+        }
+
+        public async Task DeleteRangeProductionGroups(List<ProductionGroup> productionGroups)
+        {
+            productionGroups.ForEach(prod => _dbContext.RemoveRange(prod.ProductionItems));
+            _dbContext.ProductionGroups.RemoveRange(productionGroups);
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

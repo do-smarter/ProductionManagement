@@ -13,28 +13,32 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
         private readonly IAsyncRepository<ItemHistory> _itemHistoryRepository;
         private readonly IItemRepository _itemRepository;
         private readonly IMapper _mapper;
+        private readonly ProductionService _productionService;
 
         public EditItemCommandHandler(IAsyncRepository<ItemHistory> itemHistoryRepository,
                                         IItemRepository itemRepository,
-                                        IMapper mapper)
+                                        IMapper mapper,
+                                        ProductionService productionService)
         {
             _itemHistoryRepository = itemHistoryRepository;
             _itemRepository = itemRepository;
             _mapper = mapper;
+            _productionService = productionService;
         }
 
         public async Task<Unit> Handle(EditItemCommand request, CancellationToken cancellationToken)
         {
             var validator = new EditItemCommandValidator();
-            await ProductionService.ValidateRequest(request, validator);
+            await _productionService.ValidateRequest(request, validator);
 
             Item item = await _itemRepository.GetByProductNumber(request.ProductNumber);
-            Item updated = _mapper.Map<Item>(request);
-            updated.LastModifiedBy = request.UserName;
+
             if (item == null)
             {
                 throw new ResourceNotFoundException(nameof(Item), request.ProductNumber);
             }
+
+            Item updated = _mapper.Map<Item>(request);
             if (!item.Updated(updated))
             {
                 throw new EntityUpdateException(nameof(Item), request.ProductNumber);
@@ -65,6 +69,8 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
             item.Description = command.Description;
             item.ProductWeight = command.ProductWeight;
             item.ProductionTimeSec = command.ProductionTimeSec;
+            item.LastModifiedBy = command.UserName;
+
             return item;
         }
     }

@@ -6,7 +6,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionItems.Command
     {
         public EditProductionItemCommandValidator()
         {
-            RuleFor(p => p.Id).NotNull().NotEmpty()
+            RuleFor(p => p.ProductionItemId).NotNull().NotEmpty()
                 .WithMessage("{PropertyName} is required.");
             RuleFor(p => p.Comment).NotNull().NotEmpty()
                 .WithMessage("{PropertyName} is required.");
