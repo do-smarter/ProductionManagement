@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Erfa.PruductionManagement.Application.Features.ProductionItems;
 using Erfa.PruductionManagement.Application.RequestModels;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Archive;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 
 namespace Erfa.PruductionManagement.Application.Profiles
 {

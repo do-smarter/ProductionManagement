@@ -3,7 +3,7 @@ using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.RequestModels;
 using Erfa.PruductionManagement.Application.Services;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 using Erfa.PruductionManagement.Domain.Enums;
 using MediatR;
 

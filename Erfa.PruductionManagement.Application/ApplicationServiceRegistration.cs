@@ -12,6 +12,7 @@ namespace Erfa.PruductionManagement.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddScoped<ProductionService, ProductionService>();
+
             return services;
         }
     }

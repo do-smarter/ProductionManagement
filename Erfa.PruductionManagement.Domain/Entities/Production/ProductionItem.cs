@@ -1,7 +1,7 @@
 ﻿using Erfa.PruductionManagement.Domain.Common;
 using Erfa.PruductionManagement.Domain.Enums;
 
-namespace Erfa.PruductionManagement.Domain.Entities
+namespace Erfa.PruductionManagement.Domain.Entities.Production
 
 {
     public class ProductionItem : AuditableEntity

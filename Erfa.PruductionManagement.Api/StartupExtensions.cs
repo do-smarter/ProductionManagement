@@ -3,6 +3,8 @@ using Erfa.ProductionManagement.Persistance;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Erfa.PruductionManagement.Api.Middlewares;
+using Microsoft.AspNetCore.Identity;
+using Erfa.PruductionManagement.Domain.Entities.Users;
 
 namespace Erfa.PruductionManagement.Api
 {
@@ -15,6 +17,12 @@ namespace Erfa.PruductionManagement.Api
 
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
+
+            // For Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ErfaAuthDbContext>()
+                .AddDefaultTokenProviders();
+
 
             builder.Services.AddHttpContextAccessor();
 
@@ -39,7 +47,7 @@ namespace Erfa.PruductionManagement.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Production Management API");
+                    c.SwaggerEndpoint("/swagger/v2/swagger.json", "Production Management API");
                 });
             }
 
@@ -57,13 +65,13 @@ namespace Erfa.PruductionManagement.Api
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
+                c.SwaggerDoc("v2", new OpenApiInfo
                 {
-                    Version = "v1",
+                    Version = "v2",
                     Title = "ProductionManagement API",
 
                 });
-               // c.OperationFilter<FileResultContentTypeOpertationFilter>();
+                // c.OperationFilter<FileResultContentTypeOpertationFilter>();
             });
         }
 

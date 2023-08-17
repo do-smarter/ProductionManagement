@@ -1,4 +1,4 @@
-﻿using Erfa.PruductionManagement.Domain.Entities;
+﻿using Erfa.PruductionManagement.Domain.Entities.Production;
 
 namespace Erfa.PruductionManagement.Application.Contracts.Persistance
 {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 using MediatR;
 
 namespace Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemList

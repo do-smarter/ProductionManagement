@@ -2,7 +2,7 @@
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.Services;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 using Erfa.PruductionManagement.Domain.Enums;
 using FluentValidation.Results;
 using MediatR;
@@ -75,7 +75,7 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
                 throw new PersistanceFailedException(nameof(ProductionGroup),
                                                     string.Join(", ", request.ProductionGroupIds.ToArray()));
             }
-            
+
             return Unit.Value;
         }
     }

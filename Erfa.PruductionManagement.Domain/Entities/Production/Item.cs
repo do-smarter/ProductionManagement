@@ -1,6 +1,6 @@
 ﻿using Erfa.PruductionManagement.Domain.Common;
 
-namespace Erfa.PruductionManagement.Domain.Entities
+namespace Erfa.PruductionManagement.Domain.Entities.Production
 
 {
     public class Item : AuditableEntity

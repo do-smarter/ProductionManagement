@@ -3,7 +3,8 @@ using AutoMapper;
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.Services;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Archive;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 using MediatR;
 
 namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem

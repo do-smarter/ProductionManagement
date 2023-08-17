@@ -1,7 +1,6 @@
-﻿
-using Erfa.PruductionManagement.Domain.Common;
+﻿using Erfa.PruductionManagement.Domain.Common;
 
-namespace Erfa.PruductionManagement.Domain.Entities
+namespace Erfa.PruductionManagement.Domain.Entities.Archive
 {
     public class ItemHistory : ArchivedEntity
     {
@@ -10,6 +9,6 @@ namespace Erfa.PruductionManagement.Domain.Entities
         public double ProductionTimeSec { get; set; }
         public double ProductWeight { get; set; }
         public string Category { get; set; } = string.Empty;
-        
+
     }
 }

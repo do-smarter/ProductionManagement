@@ -2,7 +2,7 @@
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.Services;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 using FluentValidation.Results;
 using MediatR;
 
@@ -69,6 +69,6 @@ namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Comman
             await _productionService.MergePriorities(result, groups, request.UserName);
 
             return _mapper.Map<ProductionGroupVm>(result);
-        }        
+        }
     }
 }

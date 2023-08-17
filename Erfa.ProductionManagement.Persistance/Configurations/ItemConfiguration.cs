@@ -1,4 +1,4 @@
-﻿using Erfa.PruductionManagement.Domain.Entities;
+﻿using Erfa.PruductionManagement.Domain.Entities.Production;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

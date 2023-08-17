@@ -4,7 +4,8 @@ using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
 using Erfa.PruductionManagement.Application.RequestModels;
 using Erfa.PruductionManagement.Application.Services;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Archive;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

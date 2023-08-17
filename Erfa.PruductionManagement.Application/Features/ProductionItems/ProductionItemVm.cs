@@ -1,6 +1,4 @@
-﻿using Erfa.PruductionManagement.Domain.Entities;
-
-namespace Erfa.PruductionManagement.Application.Features.ProductionItems
+﻿namespace Erfa.PruductionManagement.Application.Features.ProductionItems
 {
     public class ProductionItemVm
     {

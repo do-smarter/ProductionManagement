@@ -59,6 +59,10 @@ namespace Erfa.PruductionManagement.Api.Middlewares
                     httpStatusCode = HttpStatusCode.Unauthorized;
                     result = JsonSerializer.Serialize(new ErrorDto(authorizationException.Message, 401));
                     break;
+                case IdentityException identityException:
+                    httpStatusCode = HttpStatusCode.Unauthorized;
+                    result = JsonSerializer.Serialize(new ErrorDto(identityException.Message, 400));
+                    break;
                 default:
                     httpStatusCode = HttpStatusCode.InternalServerError;
                     result = JsonSerializer.Serialize(new ErrorDto("Internal server error", 500));

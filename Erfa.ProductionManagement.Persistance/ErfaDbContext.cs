@@ -1,5 +1,6 @@
 ﻿using Erfa.PruductionManagement.Domain.Common;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Archive;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 using Microsoft.EntityFrameworkCore;
 
 namespace Erfa.ProductionManagement.Persistance

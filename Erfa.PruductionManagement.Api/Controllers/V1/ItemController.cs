@@ -2,7 +2,6 @@
 using Erfa.PruductionManagement.Application.Features.Items;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveItem;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
-using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRangeItems;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem;
 using Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemDetails;
 using Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemList;

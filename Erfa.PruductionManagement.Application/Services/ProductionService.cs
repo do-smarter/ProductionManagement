@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Erfa.PruductionManagement.Application.Contracts.Persistance;
 using Erfa.PruductionManagement.Application.Exceptions;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Archive;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 using Erfa.PruductionManagement.Domain.Enums;
 using FluentValidation;
 

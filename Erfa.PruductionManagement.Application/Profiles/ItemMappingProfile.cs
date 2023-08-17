@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Erfa.PruductionManagement.Api.RequestModels;
 using Erfa.PruductionManagement.Application.Features.Items;
-using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
 using Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem;
-using Erfa.PruductionManagement.Domain.Entities;
+using Erfa.PruductionManagement.Domain.Entities.Archive;
+using Erfa.PruductionManagement.Domain.Entities.Production;
 
 namespace Erfa.PruductionManagement.Application.Profiles
 {
