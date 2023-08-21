@@ -1,8 +1,6 @@
 ﻿using Erfa.PruductionManagement.Application.Exceptions;
-using Erfa.PruductionManagement.Application.Features.Items.Commands.CreateItem;
 using Erfa.PruductionManagement.Application.Services;
 using Erfa.PruductionManagement.Domain.Entities.Users;
-using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -17,19 +15,22 @@ namespace Erfa.PruductionManagement.Application.Features.User.RegisterNewUser
         private readonly IConfiguration _configuration;
         private readonly ILogger<RegisterNewUserCommandHandler> _logger;
         private readonly ProductionService _productionService;
+        private readonly UserService _userService;
 
 
         public RegisterNewUserCommandHandler(UserManager<ApplicationUser> userManager,
                                              RoleManager<IdentityRole> roleManager,
                                              IConfiguration configuration,
                                              ILogger<RegisterNewUserCommandHandler> logger,
-                                             ProductionService productionService)
+                                             ProductionService productionService,
+                                             UserService userService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _logger = logger;
             _productionService = productionService;
+            _userService = userService;
         }
 
         public async Task<string> Handle(RegisterNewUserCommand request, CancellationToken cancellationToken)
@@ -58,22 +59,25 @@ namespace Erfa.PruductionManagement.Application.Features.User.RegisterNewUser
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
 
+
             IdentityResult saved = await _userManager.CreateAsync(user);
 
-            if (!saved.Succeeded)
+            if (saved.Succeeded)
             {
-                throw new PersistanceFailedException(nameof(ApplicationUser), request.UserName);
+                foreach (var role in request.Roles)
+                {
+                    await _userManager.AddToRoleAsync(user, role);
+                }
+                string regCode = _userService.GenerateRegCode();
+                string hashedRegCode = _userService.HashString(regCode);
+                IdentityResult updated = await _userManager.UpdateAsync(user);
+                if (!updated.Succeeded)
+                {
+                    throw new PersistanceFailedException(nameof(ApplicationUser), request.UserName);
+                }
+                return regCode;
             }
-
-            foreach (var role in request.Roles)
-            {
-                await _userManager.AddToRoleAsync(user, role);
-            }
-
-
-
-
-            throw new NotImplementedException();
+            else throw new PersistanceFailedException(nameof(ApplicationUser), request.UserName);
         }
     }
 }

@@ -1,10 +1,16 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Erfa.PruductionManagement.Application.Services
 {
     public class UserService
     {
+        private readonly IConfiguration _configuration;
+        public UserService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         internal string GenerateRegCode()
         {
@@ -35,6 +41,29 @@ namespace Erfa.PruductionManagement.Application.Services
                 } while (!AllChar.Any(x => x == c));
 
                 return c;
+            }
+        }
+        internal string HashString(string text)
+        {
+            string salt = _configuration["RegCode:Salt"];
+            if (String.IsNullOrEmpty(text))
+            {
+                throw new ArgumentException("Invalid string");
+            }
+
+            // Uses SHA256 to create the hash
+            using (var sha = new SHA256Managed())
+            {
+                // Convert the string to a byte array first, to be processed
+                byte[] textBytes = Encoding.UTF8.GetBytes(text + salt);
+                byte[] hashBytes = sha.ComputeHash(textBytes);
+
+                // Convert back to a string, removing the '-' that BitConverter adds
+                string hash = BitConverter
+                    .ToString(hashBytes)
+                    .Replace("-", String.Empty);
+
+                return hash;
             }
         }
     }

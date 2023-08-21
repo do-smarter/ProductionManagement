@@ -60,7 +60,7 @@ namespace Erfa.PruductionManagement.Api.Middlewares
                     result = JsonSerializer.Serialize(new ErrorDto(authorizationException.Message, 401));
                     break;
                 case IdentityException identityException:
-                    httpStatusCode = HttpStatusCode.Unauthorized;
+                    httpStatusCode = HttpStatusCode.BadRequest;
                     result = JsonSerializer.Serialize(new ErrorDto(identityException.Message, 400));
                     break;
                 default:

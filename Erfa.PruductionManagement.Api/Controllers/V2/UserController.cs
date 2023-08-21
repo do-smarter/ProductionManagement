@@ -2,6 +2,7 @@
 using Erfa.PruductionManagement.Application.Features.Items;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Erfa.PruductionManagement.Application.Features.User.RegisterNewUser;
 
 namespace Erfa.PruductionManagement.Api.Controllers.V2
 {
@@ -17,14 +18,17 @@ namespace Erfa.PruductionManagement.Api.Controllers.V2
         }
 
 
-        [HttpGet("demo", Name = "Demo")]
+        [HttpPost("RegisterUser", Name = "Register New User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<ItemVm>>> Demo()
+        public async Task<ActionResult<string>> Demo(RegisterNewUserCommand command)
         {
-            var result = await _mediator.Send(new GetItemsListQuery());
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+
     }
 }
