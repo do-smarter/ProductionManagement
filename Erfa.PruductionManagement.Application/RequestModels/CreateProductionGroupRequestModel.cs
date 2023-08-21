@@ -1,6 +1,4 @@
-﻿using Erfa.PruductionManagement.Domain.Enums;
-
-namespace Erfa.PruductionManagement.Application.RequestModels
+﻿namespace Erfa.PruductionManagement.Application.RequestModels
 {
     public class CreateProductionGroupRequestModel
     {

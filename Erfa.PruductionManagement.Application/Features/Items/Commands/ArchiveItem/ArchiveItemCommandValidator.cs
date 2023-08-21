@@ -8,9 +8,8 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveI
         {
             RuleFor(p => p.UserName).NotNull().NotEmpty()
                 .WithMessage("Headers are missing {PropertyName}.");
-            RuleFor(p => p.ProductNumber).NotEmpty()
-                .WithMessage("{PropertyName} is required.")
-               .NotNull();
+            RuleFor(p => p.ProductNumber).NotNull().NotEmpty()
+                .WithMessage("{PropertyName} is required.");
         }
     }
 }

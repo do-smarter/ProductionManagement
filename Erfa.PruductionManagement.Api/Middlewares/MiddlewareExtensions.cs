@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-
-namespace Erfa.PruductionManagement.Api.Middlewares
+﻿namespace Erfa.PruductionManagement.Api.Middlewares
 {
     public static class MiddlewareExtensions
     {

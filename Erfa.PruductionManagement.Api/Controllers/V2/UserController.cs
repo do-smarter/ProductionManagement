@@ -1,6 +1,4 @@
-﻿using Erfa.PruductionManagement.Application.Features.Items.Queries.GetItemList;
-using Erfa.PruductionManagement.Application.Features.Items;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Erfa.PruductionManagement.Application.Features.User.RegisterNewUser;
 
