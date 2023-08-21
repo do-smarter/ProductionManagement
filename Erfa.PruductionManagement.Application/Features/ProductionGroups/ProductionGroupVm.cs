@@ -1,5 +1,4 @@
 ﻿using Erfa.PruductionManagement.Application.Features.ProductionItems;
-using Erfa.PruductionManagement.Domain.Enums;
 
 namespace Erfa.PruductionManagement.Application.Features.ProductionGroups
 {

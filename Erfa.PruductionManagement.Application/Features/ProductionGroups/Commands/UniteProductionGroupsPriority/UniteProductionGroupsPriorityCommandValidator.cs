@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using MediatR;
 
 namespace Erfa.PruductionManagement.Application.Features.ProductionGroups.Commands.UniteProductionGroupsPriority
 {
