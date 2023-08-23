@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Erfa.PruductionManagement.Application.Features.User.RegisterNewUser;
+using Erfa.PruductionManagement.Application.Features.User.RegisterPassword;
+using Erfa.PruductionManagement.Application.Features.User.LogIn;
+using Erfa.PruductionManagement.Application.Features.User;
 
 namespace Erfa.PruductionManagement.Api.Controllers.V2
 {
@@ -15,18 +18,38 @@ namespace Erfa.PruductionManagement.Api.Controllers.V2
             _mediator = mediator;
         }
 
-
         [HttpPost("RegisterUser", Name = "Register New User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<string>> Demo(RegisterNewUserCommand command)
+        public async Task<ActionResult<string>> RegisterUser(RegisterNewUserCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
 
+        [HttpPost("RegisterPassword", Name = "Register Password For Registered User")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<string>> RegisterPassword(RegisterPasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
 
+        [HttpPost("LogIn", Name = "Log In")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<JwtTokenVm>> LogIn(LogInCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+        //TODO add filters for authorization
     }
 }

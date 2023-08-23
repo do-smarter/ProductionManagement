@@ -1,13 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Erfa.PruductionManagement.Application.Services
 {
-    public class UserService
+    public class IdentityService
     {
         private readonly IConfiguration _configuration;
-        public UserService(IConfiguration configuration)
+        public IdentityService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -65,6 +69,24 @@ namespace Erfa.PruductionManagement.Application.Services
 
                 return hash;
             }
+        }
+        internal JwtSecurityToken GetToken(List<Claim> claims)
+        {
+            var now = DateTime.Now;
+
+            claims.Add(new Claim("iat", now.ToString()));
+
+
+            var authsigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                expires: now.AddMinutes(30),
+                notBefore: now,
+                claims: claims,
+                signingCredentials: new SigningCredentials(authsigningKey, SecurityAlgorithms.HmacSha256)
+                );
+            return token;
         }
     }
 }

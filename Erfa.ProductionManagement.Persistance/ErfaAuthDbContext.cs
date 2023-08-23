@@ -1,5 +1,5 @@
 ﻿using Erfa.PruductionManagement.Domain.Common;
-using Erfa.PruductionManagement.Domain.Entities.Users;
+using Erfa.PruductionManagement.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Erfa.PruductionManagement.Api.Middlewares;
 using Microsoft.AspNetCore.Identity;
-using Erfa.PruductionManagement.Domain.Entities.Users;
+using Erfa.PruductionManagement.Domain.Entities.Identity;
 
 namespace Erfa.PruductionManagement.Api
 {

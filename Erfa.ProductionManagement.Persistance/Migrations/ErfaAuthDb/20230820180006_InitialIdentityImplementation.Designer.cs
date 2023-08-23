@@ -25,7 +25,7 @@ namespace Erfa.ProductionManagement.Persistance.Migrations.ErfaAuthDb
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Users.ApplicationUser", b =>
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -248,7 +248,7 @@ namespace Erfa.ProductionManagement.Persistance.Migrations.ErfaAuthDb
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Users.ApplicationIdentityRole", b =>
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Identity.ApplicationIdentityRole", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
@@ -289,7 +289,7 @@ namespace Erfa.ProductionManagement.Persistance.Migrations.ErfaAuthDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Users.ApplicationUser", null)
+                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -298,7 +298,7 @@ namespace Erfa.ProductionManagement.Persistance.Migrations.ErfaAuthDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Users.ApplicationUser", null)
+                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -313,7 +313,7 @@ namespace Erfa.ProductionManagement.Persistance.Migrations.ErfaAuthDb
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Users.ApplicationUser", null)
+                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -322,7 +322,7 @@ namespace Erfa.ProductionManagement.Persistance.Migrations.ErfaAuthDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Users.ApplicationUser", null)
+                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

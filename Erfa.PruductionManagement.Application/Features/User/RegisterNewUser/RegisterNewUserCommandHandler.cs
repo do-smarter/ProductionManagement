@@ -1,6 +1,6 @@
 ﻿using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.Services;
-using Erfa.PruductionManagement.Domain.Entities.Users;
+using Erfa.PruductionManagement.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +15,7 @@ namespace Erfa.PruductionManagement.Application.Features.User.RegisterNewUser
         private readonly IConfiguration _configuration;
         private readonly ILogger<RegisterNewUserCommandHandler> _logger;
         private readonly ProductionService _productionService;
-        private readonly UserService _userService;
+        private readonly IdentityService _identityService;
 
 
         public RegisterNewUserCommandHandler(UserManager<ApplicationUser> userManager,
@@ -23,14 +23,14 @@ namespace Erfa.PruductionManagement.Application.Features.User.RegisterNewUser
                                              IConfiguration configuration,
                                              ILogger<RegisterNewUserCommandHandler> logger,
                                              ProductionService productionService,
-                                             UserService userService)
+                                             IdentityService identityService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _logger = logger;
             _productionService = productionService;
-            _userService = userService;
+            _identityService = identityService;
         }
 
         public async Task<string> Handle(RegisterNewUserCommand request, CancellationToken cancellationToken)
@@ -68,8 +68,9 @@ namespace Erfa.PruductionManagement.Application.Features.User.RegisterNewUser
                 {
                     await _userManager.AddToRoleAsync(user, role);
                 }
-                string regCode = _userService.GenerateRegCode();
-                string hashedRegCode = _userService.HashString(regCode);
+                string regCode = _identityService.GenerateRegCode();
+                string hashedRegCode = _identityService.HashString(regCode);
+                user.RegCodeHash = hashedRegCode;
                 IdentityResult updated = await _userManager.UpdateAsync(user);
                 if (!updated.Succeeded)
                 {

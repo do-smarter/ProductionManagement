@@ -13,7 +13,7 @@ namespace Erfa.PruductionManagement.Application.Features.User.RegisterPassword
             RuleFor(p => p.RepeatedPassword).NotNull().NotEmpty()
                 .WithMessage("{PropertyName} is required.");
             RuleFor(p => p).Must(p => AreEqualPasswords(p))
-                .WithMessage("Passworda ar not identical");
+                .WithMessage("Passwords are not identical");
             RuleFor(p => p.RegCode).NotNull().NotEmpty()
                 .WithMessage("{PropertyName} is required.");
         }
