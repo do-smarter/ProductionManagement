@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Erfa.PruductionManagement.Application.Exceptions;
+﻿using Erfa.PruductionManagement.Application.Exceptions;
 using Erfa.PruductionManagement.Application.Services;
 using Erfa.PruductionManagement.Domain.Entities.Identity;
 using MediatR;
@@ -10,25 +9,22 @@ using System.Security.Claims;
 
 namespace Erfa.PruductionManagement.Application.Features.User.LogIn
 {
-    public class LogInCommandHandler : IRequestHandler<LogInCommand, JwtTokenVm>
+    public class LogInCommandHandler : IRequestHandler<LogInCommand, (string, LoginResponseVm)>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LogInCommandHandler> _logger;
         private readonly IdentityService _identityService;
-        private readonly IMapper _mapper;
 
         public LogInCommandHandler(UserManager<ApplicationUser> userManager,
                                    ILogger<LogInCommandHandler> logger,
-                                   IdentityService identityService,
-                                   IMapper mapper)
+                                   IdentityService identityService)
         {
             _userManager = userManager;
             _logger = logger;
             _identityService = identityService;
-            _mapper = mapper;
         }
 
-        public async Task<JwtTokenVm> Handle(LogInCommand request, CancellationToken cancellationToken)
+        public async Task<(string, LoginResponseVm)> Handle(LogInCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
 
@@ -59,8 +55,15 @@ namespace Erfa.PruductionManagement.Application.Features.User.LogIn
                 authClaim.Add(new Claim(ClaimTypes.Role, role));
             }
             JwtSecurityToken jwtToken = _identityService.GetToken(authClaim);
-
-            return new JwtTokenVm() { Token = tokenHandler.WriteToken(jwtToken) };
+            var loginResponseVm = new LoginResponseVm()
+            {
+                Expires = jwtToken.ValidTo,
+                Roles = userRoles.ToArray(),
+                Username = user.UserName
+            };
+            return (tokenHandler.WriteToken(jwtToken), loginResponseVm);
         }
+
+
     }
 }

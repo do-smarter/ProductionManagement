@@ -32,7 +32,6 @@ namespace Erfa.PruductionManagement.Api.Controllers.V2
         [HttpPost("RegisterPassword", Name = "Register Password For Registered User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<string>> RegisterPassword(RegisterPasswordCommand command)
         {
@@ -43,12 +42,21 @@ namespace Erfa.PruductionManagement.Api.Controllers.V2
         [HttpPost("LogIn", Name = "Log In")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<JwtTokenVm>> LogIn(LogInCommand command)
+        public async Task<ActionResult<LoginResponseVm>> LogIn(LogInCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(result);
+
+            Response.Cookies
+                .Append("X-Access-Token", result.Item1,
+                new CookieOptions()
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                    Secure = true
+                });
+
+            return Ok(result.Item2);
         }
         //TODO add filters for authorization
     }
