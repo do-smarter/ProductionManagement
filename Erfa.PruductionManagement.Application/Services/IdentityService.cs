@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -73,10 +72,6 @@ namespace Erfa.PruductionManagement.Application.Services
         internal JwtSecurityToken GetToken(List<Claim> claims)
         {
             var now = DateTime.Now;
-
-            claims.Add(new Claim("iat", now.ToString()));
-
-
             var authsigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
