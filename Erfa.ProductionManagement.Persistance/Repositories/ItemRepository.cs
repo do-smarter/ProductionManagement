@@ -26,7 +26,6 @@ namespace Erfa.ProductionManagement.Persistance.Repositories
                     .Equals(i.ProductNumber, ProductNumber)
                   )
                  .FirstOrDefaultAsync();
-            throw new NotImplementedException();
         }
     }
 }

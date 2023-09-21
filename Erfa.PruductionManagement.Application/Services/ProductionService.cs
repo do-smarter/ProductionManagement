@@ -95,18 +95,6 @@ namespace Erfa.PruductionManagement.Application.Services
             await _groupRepository.UpdateRangeAsync(groups);
         }
 
-        internal async Task ChangeSingleProductionGroupPriority(ProductionGroup productionGroup, int priority)
-        {
-            List<ProductionGroup> groups = await _groupRepository.ListAllGroupsOrderedByPriority();
-            groups.Remove(productionGroup);
-            groups.Insert(priority - 1, productionGroup);
-            foreach (var group in groups)
-            {
-                group.Priority = groups.IndexOf(group) + 1;
-            }
-
-            await _groupRepository.UpdateRangeAsync(groups);
-        }
         internal async Task<int> AddSingleProductionGroupPriority(ProductionGroup productionGroup, int priority)
         {
             List<ProductionGroup> groups = await _groupRepository.ListAllGroupsOrderedByPriority();
@@ -133,7 +121,6 @@ namespace Erfa.PruductionManagement.Application.Services
             await _groupRepository.UpdateRangeAsync(groups);
             return placeHolder.Priority;
         }
-
 
         internal bool EqalProductItems(List<ProductionItem> productionItems)
         {
@@ -173,17 +160,6 @@ namespace Erfa.PruductionManagement.Application.Services
             productionItemHistory.ArchivedBy = userName;
             productionItemHistory.ArchiveState = archiveState;
             return await _productionItemHistoryRepository.AddAsync(productionItemHistory);
-        }
-        internal async Task ArchiveRangeProductionItem(List<ProductionItem> productionItemList, string userName, ArchiveState archiveState)
-        {
-            List<ProductionItemHistory> productionItemHistoryList = _mapper.Map<List<ProductionItemHistory>>(productionItemList);
-            foreach (var productionItemHistory in productionItemHistoryList)
-            {
-                productionItemHistory.ArchivedBy = userName;
-                productionItemHistory.ArchiveState = archiveState;
-            }
-
-            await _productionItemHistoryRepository.AddRangeAsync(productionItemHistoryList);
         }
 
         internal ProductionItem MergeProductionItems(List<ProductionItem> productionItems, string userName)

@@ -4,38 +4,42 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Erfa.PruductionManagement.Api.Middlewares;
 using Microsoft.AspNetCore.Identity;
-using Erfa.PruductionManagement.Domain.Entities.Users;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Erfa.PruductionManagement.Api
 {
     public static class StartupExtensions
     {
+        static string policyName = "policy";
         public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
         {
+            var configuration = builder.Configuration;
 
-            AddSwagger(builder.Services);
+          //  AddSwagger(builder.Services);
 
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
-
-            // For Identity
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ErfaAuthDbContext>()
-                .AddDefaultTokenProviders();
 
 
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddControllers();
 
+            policyName = !configuration["Cors:policyName"].IsNullOrEmpty() ? configuration["Cors:policyName"] : policyName;
+            var origins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("Open",
-                    builder => builder
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod());
+                options.AddPolicy(name: policyName,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins(origins)
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod()
+                                            .AllowCredentials();
+                                  });
             });
+
+            builder.Services.AddSwaggerGen();
 
             return builder.Build();
         }
@@ -45,16 +49,19 @@ namespace Erfa.PruductionManagement.Api
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
+                app.UseSwaggerUI();
+                /*
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v2/swagger.json", "Production Management API");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Production Management API");
                 });
+                */
             }
 
             app.UseHttpsRedirection();
             app.UseCustomExceptionHandler();
             app.UseRouting();
-            app.UseCors("Open");
+            app.UseCors(policyName);
             app.MapControllers();
 
             return app;
@@ -63,9 +70,10 @@ namespace Erfa.PruductionManagement.Api
 
         private static void AddSwagger(IServiceCollection services)
         {
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v2", new OpenApiInfo
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v2",
                     Title = "ProductionManagement API",
