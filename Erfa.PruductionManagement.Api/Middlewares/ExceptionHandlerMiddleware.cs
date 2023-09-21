@@ -35,7 +35,7 @@ namespace Erfa.PruductionManagement.Api.Middlewares
 
             var result = string.Empty;
             Console.WriteLine(exception.ToString());
-            _logger.LogError(exception,exception.Message);
+            _logger.LogError(exception, exception.Message);
 
             switch (exception)
             {
@@ -54,14 +54,6 @@ namespace Erfa.PruductionManagement.Api.Middlewares
                 case PersistanceFailedException persistanceFailedException:
                     httpStatusCode = HttpStatusCode.InternalServerError;
                     result = JsonSerializer.Serialize(new ErrorDto(persistanceFailedException.Message, 500));
-                    break;
-                case AuthorizationException authorizationException:
-                    httpStatusCode = HttpStatusCode.Unauthorized;
-                    result = JsonSerializer.Serialize(new ErrorDto(authorizationException.Message, 401));
-                    break;
-                case IdentityException identityException:
-                    httpStatusCode = HttpStatusCode.BadRequest;
-                    result = JsonSerializer.Serialize(new ErrorDto(identityException.Message, 400));
                     break;
                 default:
                     httpStatusCode = HttpStatusCode.InternalServerError;

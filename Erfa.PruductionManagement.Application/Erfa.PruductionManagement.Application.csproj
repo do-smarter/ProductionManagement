@@ -21,9 +21,4 @@
     <ProjectReference Include="..\Erfa.PruductionManagement.Domain\Erfa.PruductionManagement.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\User\InvalidateToken\" />
-    <Folder Include="Features\User\LogOut\" />
-  </ItemGroup>
-
 </Project>
