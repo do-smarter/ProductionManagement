@@ -8,6 +8,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["Erfa.PruductionManagement.Api/Erfa.PruductionManagement.Api.csproj", "Erfa.PruductionManagement.Api/"]
+COPY ["Erfa.ProductionManagement.Persistance/Erfa.ProductionManagement.Persistance.csproj", "Erfa.ProductionManagement.Persistance/"]
+COPY ["Erfa.PruductionManagement.Application/Erfa.PruductionManagement.Application.csproj", "Erfa.PruductionManagement.Application/"]
+COPY ["Erfa.PruductionManagement.Domain/Erfa.PruductionManagement.Domain.csproj", "Erfa.PruductionManagement.Domain/"]
 RUN dotnet restore "Erfa.PruductionManagement.Api/Erfa.PruductionManagement.Api.csproj"
 COPY . .
 WORKDIR "/src/Erfa.PruductionManagement.Api"
