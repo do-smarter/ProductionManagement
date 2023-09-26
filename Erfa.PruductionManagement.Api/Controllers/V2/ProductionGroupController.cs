@@ -8,9 +8,9 @@ using Erfa.PruductionManagement.Application.Features.ProductionGroups.Commands.C
 using Erfa.PruductionManagement.Application.Features.ProductionGroups.Commands.TakeDownProductionGroup;
 using Erfa.PruductionManagement.Application.Features.ProductionGroups.Commands.UniteProductionGroupsPriority;
 
-namespace Erfa.PruductionManagement.Api.Controllers.V1
+namespace Erfa.PruductionManagement.Api.Controllers.V2
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v2/[controller]")]
     [ApiController]
     public class ProductionGroupController : Controller
     {
@@ -21,7 +21,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             _mediator = mediator;
         }
 
-        [HttpGet("GetAllProductionGroups", Name = "Get All Production Groups")]
+        [HttpGet("GetAllProductionGroups",  Name = "V2 - Get All Production Groups")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -32,7 +32,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        [HttpPut("MergeGroups", Name = "Merge Production Items Into New Gropus")]
+        [HttpPut("MergeGroups",  Name = "V2 - Merge Production Items Into New Gropus")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -45,7 +45,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        [HttpPost("AddNewProductionGroup", Name = "Add New Production Group")]
+        [HttpPost("AddNewProductionGroup",  Name = "V2 - Add New Production Group")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -58,7 +58,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        [HttpDelete("TakeDownProductionGroup", Name = "Take Down Production Group")]
+        [HttpDelete("TakeDownProductionGroup",  Name = "V2 - Take Down Production Group")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -71,7 +71,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        [HttpPut("UniteProductionGroupsPriority", Name = "Unite Productio nGroups Priority")]
+        [HttpPut("UniteProductionGroupsPriority",  Name = "V2 - Unite Productio nGroups Priority")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

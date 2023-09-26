@@ -6,9 +6,9 @@ using Erfa.PruductionManagement.Application.RequestModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Erfa.PruductionManagement.Api.Controllers.V1
+namespace Erfa.PruductionManagement.Api.Controllers.V2
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v2/[controller]")]
     [ApiController]
     public class ProductionItemController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             _mediator = mediator;
         }
 
-        [HttpGet("GetAllProductionItems", Name = "Get All Production Items")]
+        [HttpGet("GetAllProductionItems",  Name = "V2 - Get All Production Items")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -29,7 +29,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        [HttpPut("EditProductionItem", Name = "Edit Production Item")]
+        [HttpPut("EditProductionItem",  Name = "V2 - Edit Production Item")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -41,7 +41,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             var result = await _mediator.Send(new EditProductionItemCommand(request, userName));
             return Ok(result);
         }
-        [HttpPut("ChangeProductionItemState", Name = "Change Production Item's State")]
+        [HttpPut("ChangeProductionItemState",  Name = "V2 - Change Production Item's State")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

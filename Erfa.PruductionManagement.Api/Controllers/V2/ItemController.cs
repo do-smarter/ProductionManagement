@@ -9,9 +9,9 @@ using Erfa.PruductionManagement.Application.RequestModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Erfa.PruductionManagement.Api.Controllers.V1
+namespace Erfa.PruductionManagement.Api.Controllers.V2
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v2/[controller]")]
     [ApiController]
     public class ItemController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             _mediator = mediator;
         }
 
-        [HttpGet("GetAllItems", Name = "GetAllItems")]
+        [HttpGet("GetAllItems",  Name = "V2 - GetAllItems")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -32,7 +32,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        [HttpGet("GetItemDetails", Name = "GetItemByProductNumber")]
+        [HttpGet("GetItemDetails",  Name = "V2 - GetItemByProductNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -42,7 +42,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        [HttpPost("CreateItem", Name = "CreateNewItem")]
+        [HttpPost("CreateItem",  Name = "V2 - CreateNewItem")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -56,7 +56,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return StatusCode(201, result);
         }
 
-        [HttpPost("CreateItemRange", Name = "CreateRangeOfNewItem")]
+        [HttpPost("CreateItemRange",  Name = "V2 - CreateRangeOfNewItem")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -70,7 +70,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return StatusCode(201, result);
         }
 
-        [HttpPut("EditItem", Name = "EditItem")]
+        [HttpPut("EditItem",  Name = "V2 - EditItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -84,7 +84,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V1
             return Ok(result);
         }
 
-        [HttpPut("ArchiveItem", Name = "ArchiveItem")]
+        [HttpPut("ArchiveItem",  Name = "V2 - ArchiveItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
