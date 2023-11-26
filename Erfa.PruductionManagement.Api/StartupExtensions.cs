@@ -1,10 +1,10 @@
 ﻿using Erfa.PruductionManagement.Application;
 using Erfa.ProductionManagement.Persistance;
-using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
 using Erfa.PruductionManagement.Api.Middlewares;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace Erfa.PruductionManagement.Api
 {
@@ -15,7 +15,18 @@ namespace Erfa.PruductionManagement.Api
         {
             var configuration = builder.Configuration;
 
-          //  AddSwagger(builder.Services);
+            builder.Services.AddApiVersioning(
+              options =>
+              {
+                  options.ReportApiVersions = true;
+                  options.Conventions.Controller<Controllers.V1.ItemController>().HasApiVersion(new ApiVersion(1, 0));
+                  options.Conventions.Controller<Controllers.V2.ItemController>().HasApiVersion(new ApiVersion(2, 0));
+                  options.Conventions.Controller<Controllers.V1.ProductionGroupController>().HasApiVersion(new ApiVersion(1, 0));
+                  options.Conventions.Controller<Controllers.V2.ProductionGroupController>().HasApiVersion(new ApiVersion(2, 0));
+                  options.Conventions.Controller<Controllers.V1.ProductionItemController>().HasApiVersion(new ApiVersion(1, 0));
+                  options.Conventions.Controller<Controllers.V2.ProductionItemController>().HasApiVersion(new ApiVersion(2, 0));
+              }
+            );
 
             builder.Services.AddApplicationServices();
             builder.Services.AddPersistenceServices(builder.Configuration);
@@ -39,7 +50,26 @@ namespace Erfa.PruductionManagement.Api
                                   });
             });
 
+            builder.Services.AddApiVersioning(opt =>
+            {
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.ReportApiVersions = true;
+                opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
+                                                                new HeaderApiVersionReader("x-api-version"),
+                                                                new MediaTypeApiVersionReader("x-api-version"));
+            });
+            // Add ApiExplorer to discover versions
+            builder.Services.AddVersionedApiExplorer(setup =>
+            {
+                setup.GroupNameFormat = "'v'VVV";
+                setup.SubstituteApiVersionInUrl = true;
+            });
+
+
+            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
             return builder.Build();
         }
@@ -48,14 +78,19 @@ namespace Erfa.PruductionManagement.Api
         {
             if (app.Environment.IsDevelopment())
             {
+                var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+
                 app.UseSwagger();
-                app.UseSwaggerUI();
-                /*
-                app.UseSwaggerUI(c =>
+                // app.UseSwaggerUI();
+
+                app.UseSwaggerUI(options =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Production Management API");
+                    foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                            description.GroupName.ToUpperInvariant());
+                    }
                 });
-                */
             }
 
             app.UseHttpsRedirection();
@@ -65,42 +100,6 @@ namespace Erfa.PruductionManagement.Api
             app.MapControllers();
 
             return app;
-        }
-
-
-        private static void AddSwagger(IServiceCollection services)
-        {
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v2",
-                    Title = "ProductionManagement API",
-
-                });
-                // c.OperationFilter<FileResultContentTypeOpertationFilter>();
-            });
-        }
-
-
-        public static async Task ResetDatabaseAsync(this WebApplication app)
-        {
-            using var scope = app.Services.CreateScope();
-            try
-            {
-                var context = scope.ServiceProvider.GetService<ErfaDbContext>();
-                if (context != null)
-                {
-                    await context.Database.EnsureDeletedAsync();
-                    await context.Database.MigrateAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                //add logging here
-            }
-
         }
     }
 }
