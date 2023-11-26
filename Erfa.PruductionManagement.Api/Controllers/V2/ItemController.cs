@@ -50,6 +50,7 @@ namespace Erfa.PruductionManagement.Api.Controllers.V2
         public async Task<ActionResult<string>> CreateNewItem([FromBody] CreateItemRequestModel request,
                                                               [FromHeader] ApiHeaders apiHeaders)
         {
+            // TODO Handle duplicate entry when existing item number provided
             string userName = apiHeaders.UserName;
 
             var result = await _mediator.Send(new CreateItemCommand(request, userName));

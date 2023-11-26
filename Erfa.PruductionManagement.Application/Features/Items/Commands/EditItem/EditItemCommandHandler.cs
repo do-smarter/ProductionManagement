@@ -42,7 +42,9 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
             Item updated = _mapper.Map<Item>(request);
             if (!item.Updated(updated))
             {
-                throw new EntityUpdateException(nameof(Item), request.ProductNumber);
+                return Unit.Value;
+
+                // throw new EntityUpdateException(nameof(Item), request.ProductNumber);
             }
 
             ItemHistory history = _mapper.Map<ItemHistory>(item);
