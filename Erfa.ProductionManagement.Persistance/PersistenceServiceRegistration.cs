@@ -11,11 +11,11 @@ namespace Erfa.ProductionManagement.Persistance
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ErfaDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ErfaProdConnString")));
+                options.UseNpgsql(configuration.GetConnectionString("PostgreSQLConnString")));
             services.AddDbContext<ErfaProductionDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ErfaProdConnString")));
+                options.UseNpgsql(configuration.GetConnectionString("PostgreSQLConnString")));
             services.AddDbContext<ErfaArchiveDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ErfaProdConnString")));
+                options.UseNpgsql(configuration.GetConnectionString("PostgreSQLConnString")));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
 
             services.AddScoped<IItemRepository, ItemRepository>();

@@ -3,9 +3,9 @@
     public class AuditableEntity
     {
         public string? CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public string? LastModifiedBy { get; set; }
-        public DateTime? LastModifiedDate { get; set; } = DateTime.Now;
+        public DateTime? LastModifiedDate { get; set; } = DateTime.UtcNow;
     }
 
 }

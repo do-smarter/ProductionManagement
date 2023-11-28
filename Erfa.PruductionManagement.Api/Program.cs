@@ -8,21 +8,15 @@ var app = builder
     .ConfigureServices()
     .ConfigurePipeline();
 
-app.Run();
-
-
 using var scope = app.Services.CreateScope();
 
-var prodContext = scope.ServiceProvider.GetService<ErfaProductionDbContext>();
-if (prodContext != null)
+var context = scope.ServiceProvider.GetService<ErfaDbContext>();
+Console.WriteLine(context.GetType().Name);
+if (context != null)
 {
-    prodContext.Database.Migrate();
-}
-var archContext = scope.ServiceProvider.GetService<ErfaArchiveDbContext>();
-if (archContext != null)
-{
-    archContext.Database.Migrate();
+    context.Database.Migrate();
 }
 
+app.Run();
 
 public partial class Program { }

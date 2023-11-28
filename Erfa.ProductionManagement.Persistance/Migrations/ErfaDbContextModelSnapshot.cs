@@ -3,8 +3,8 @@ using System;
 using Erfa.ProductionManagement.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,41 +17,152 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Item", b =>
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Archive.ItemHistory", b =>
                 {
-                    b.Property<string>("ProductNumber")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ArchiveDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ArchiveState")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ArchivedBy")
+                        .HasColumnType("text");
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ProductNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<double>("ProductWeight")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("ProductionTimeSec")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArchivedItems");
+                });
+
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Archive.ProductionGroupHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ArchiveDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ArchiveState")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ArchivedBy")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProductionGroupId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArchivedProductionGroups");
+                });
+
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Archive.ProductionItemHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ArchiveDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ArchiveState")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ArchivedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("ProductionGroupHistoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductionItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RalGalv")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductionGroupHistoryId");
+
+                    b.ToTable("ArchivedProductionItems");
+                });
+
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Production.Item", b =>
+                {
+                    b.Property<string>("ProductNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double>("ProductWeight")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("ProductionTimeSec")
+                        .HasColumnType("double precision");
 
                     b.HasKey("ProductNumber");
 
@@ -63,10 +174,10 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                             ProductNumber = "XYZ123",
                             Category = "Shelv",
                             CreatedBy = "Magdalena",
-                            CreatedDate = new DateTime(2023, 6, 30, 0, 9, 27, 219, DateTimeKind.Local).AddTicks(6800),
+                            CreatedDate = new DateTime(2023, 11, 27, 21, 53, 47, 824, DateTimeKind.Utc).AddTicks(9696),
                             Description = "Very nice piece of metal",
                             LastModifiedBy = "Magdalena",
-                            LastModifiedDate = new DateTime(2023, 6, 30, 0, 9, 27, 219, DateTimeKind.Local).AddTicks(6802),
+                            LastModifiedDate = new DateTime(2023, 11, 27, 21, 53, 47, 824, DateTimeKind.Utc).AddTicks(9697),
                             ProductWeight = 100.0,
                             ProductionTimeSec = 100.0
                         },
@@ -75,144 +186,83 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                             ProductNumber = "ABC987",
                             Category = "Shelv",
                             CreatedBy = "Magdalena",
-                            CreatedDate = new DateTime(2023, 6, 30, 0, 9, 27, 219, DateTimeKind.Local).AddTicks(6808),
+                            CreatedDate = new DateTime(2023, 11, 27, 21, 53, 47, 824, DateTimeKind.Utc).AddTicks(9699),
                             Description = "Not so nice piece of metal",
                             LastModifiedBy = "Magdalena",
-                            LastModifiedDate = new DateTime(2023, 6, 30, 0, 9, 27, 219, DateTimeKind.Local).AddTicks(6809),
+                            LastModifiedDate = new DateTime(2023, 11, 27, 21, 53, 47, 824, DateTimeKind.Utc).AddTicks(9699),
                             ProductWeight = 50.0,
                             ProductionTimeSec = 50.0
                         });
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ItemHistory", b =>
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Production.ProductionGroup", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ArchiveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ArchiveState")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ArchivedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("ProductWeight")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ProductionTimeSec")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ArchivedItems");
-                });
-
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionGroup", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.ToTable("ProductionGroups");
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionGroupHistory", b =>
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Production.ProductionItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ArchiveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ArchiveState")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ArchivedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProductionGroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ArchivedProductionGroups");
-                });
-
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ItemProductNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("OrderNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("ProductionGroupId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("RalGalv")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("State")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -223,84 +273,34 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                     b.ToTable("ProductionItems");
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionItemHistory", b =>
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Archive.ProductionItemHistory", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ArchiveDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ArchiveState")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ArchivedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrderNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ProductionGroupHistoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductionItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RalGalv")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("State")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductionGroupHistoryId");
-
-                    b.ToTable("ArchivedProductionItems");
+                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Archive.ProductionGroupHistory", null)
+                        .WithMany("ProductionItems")
+                        .HasForeignKey("ProductionGroupHistoryId");
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionItem", b =>
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Production.ProductionItem", b =>
                 {
-                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Item", "Item")
+                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Production.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemProductNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.ProductionGroup", null)
+                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.Production.ProductionGroup", null)
                         .WithMany("ProductionItems")
                         .HasForeignKey("ProductionGroupId");
 
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionItemHistory", b =>
-                {
-                    b.HasOne("Erfa.PruductionManagement.Domain.Entities.ProductionGroupHistory", null)
-                        .WithMany("ProductionItems")
-                        .HasForeignKey("ProductionGroupHistoryId");
-                });
-
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionGroup", b =>
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Archive.ProductionGroupHistory", b =>
                 {
                     b.Navigation("ProductionItems");
                 });
 
-            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.ProductionGroupHistory", b =>
+            modelBuilder.Entity("Erfa.PruductionManagement.Domain.Entities.Production.ProductionGroup", b =>
                 {
                     b.Navigation("ProductionItems");
                 });
