@@ -70,7 +70,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
         {
             item.Category = command.Category;
             item.Description = command.Description;
-            item.ProductWeight = command.ProductWeight;
+            item.MaterialProductName = command.MaterialProductName;
             item.ProductionTimeSec = command.ProductionTimeSec;
             item.LastModifiedBy = command.UserName;
 

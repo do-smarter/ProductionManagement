@@ -3,6 +3,7 @@ using System;
 using Erfa.ProductionManagement.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Erfa.ProductionManagement.Persistance.Migrations
 {
     [DbContext(typeof(ErfaDbContext))]
-    partial class ErfaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231128204902_Item-ProductMaterialName-instedof-ProductWeight")]
+    partial class ItemProductMaterialNameinstedofProductWeight
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

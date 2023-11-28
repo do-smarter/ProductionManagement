@@ -12,7 +12,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
             ProductNumber = request.ProductNumber;
             Description = request.Description;
             ProductionTimeSec = request.ProductionTimeSec;
-            ProductWeight = request.ProductWeight;
+            MaterialProductName = request.MaterialProductName;
             Category = request.Category;
         }
     }

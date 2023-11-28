@@ -8,7 +8,7 @@ namespace Erfa.PruductionManagement.Domain.Entities.Production
         public string ProductNumber { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public double ProductionTimeSec { get; set; }
-        public double ProductWeight { get; set; }
+        public string MaterialProductName { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty;
 
         public bool Updated(object? obj)
@@ -17,7 +17,7 @@ namespace Erfa.PruductionManagement.Domain.Entities.Production
                    ProductNumber == item.ProductNumber &&
                    (Description != item.Description ||
                    ProductionTimeSec != item.ProductionTimeSec ||
-                   ProductWeight != item.ProductWeight ||
+                   MaterialProductName != item.MaterialProductName ||
                    Category != item.Category);
         }
     }

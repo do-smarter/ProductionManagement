@@ -7,8 +7,8 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateIt
         public CreateItemCommandValidator()
         {
             RuleFor(p => p.UserName).NotNull().NotEmpty().WithMessage("Headers are missing {PropertyName}.");
-            RuleFor(p => p.ProductWeight).NotNull().NotEmpty().WithMessage("{PropertyName} is required.");
-            RuleFor(p => p.ProductWeight).NotNull().NotEmpty().WithMessage("{PropertyName} is required.");
+            RuleFor(p => p.MaterialProductName).NotNull().NotEmpty().WithMessage("{PropertyName} is required.");
+            RuleFor(p => p.MaterialProductName).NotNull().NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(p => p.ProductionTimeSec).NotNull().NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(p => p.Category).NotNull().NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(p => p.Description).NotNull().NotEmpty().WithMessage("{PropertyName} is required.");
