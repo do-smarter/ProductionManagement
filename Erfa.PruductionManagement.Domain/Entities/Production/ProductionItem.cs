@@ -12,6 +12,7 @@ namespace Erfa.PruductionManagement.Domain.Entities.Production
         public string OrderNumber { get; set; } = string.Empty;
         public string RalGalv { get; set; } = string.Empty;
         public string Comment { get; set; } = string.Empty;
+        public string Worker { get; set; } = string.Empty;
         public ProductionState State { get; set; } = ProductionState.New;
 
         public ProductionItem()

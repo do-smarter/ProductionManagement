@@ -3,6 +3,7 @@ using System;
 using Erfa.ProductionManagement.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Erfa.ProductionManagement.Persistance.Migrations
 {
     [DbContext(typeof(ErfaDbContext))]
-    partial class ErfaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231127215347_data")]
+    partial class data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,17 +40,20 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                     b.Property<string>("ArchivedBy")
                         .HasColumnType("text");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("MaterialProductName")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ProductNumber")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<double>("ProductWeight")
+                        .HasColumnType("double precision");
 
                     b.Property<double>("ProductionTimeSec")
                         .HasColumnType("double precision");
@@ -99,10 +105,6 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("MaterialProductName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("OrderNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -139,6 +141,10 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                     b.Property<string>("ProductNumber")
                         .HasColumnType("text");
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -155,9 +161,8 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("MaterialProductName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double>("ProductWeight")
+                        .HasColumnType("double precision");
 
                     b.Property<double>("ProductionTimeSec")
                         .HasColumnType("double precision");
@@ -170,23 +175,25 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
                         new
                         {
                             ProductNumber = "XYZ123",
+                            Category = "Shelv",
                             CreatedBy = "Magdalena",
-                            CreatedDate = new DateTime(2023, 11, 29, 3, 15, 9, 621, DateTimeKind.Utc).AddTicks(2606),
+                            CreatedDate = new DateTime(2023, 11, 27, 21, 53, 47, 824, DateTimeKind.Utc).AddTicks(9696),
                             Description = "Very nice piece of metal",
                             LastModifiedBy = "Magdalena",
-                            LastModifiedDate = new DateTime(2023, 11, 29, 3, 15, 9, 621, DateTimeKind.Utc).AddTicks(2607),
-                            MaterialProductName = "some material",
+                            LastModifiedDate = new DateTime(2023, 11, 27, 21, 53, 47, 824, DateTimeKind.Utc).AddTicks(9697),
+                            ProductWeight = 100.0,
                             ProductionTimeSec = 100.0
                         },
                         new
                         {
                             ProductNumber = "ABC987",
+                            Category = "Shelv",
                             CreatedBy = "Magdalena",
-                            CreatedDate = new DateTime(2023, 11, 29, 3, 15, 9, 621, DateTimeKind.Utc).AddTicks(2609),
+                            CreatedDate = new DateTime(2023, 11, 27, 21, 53, 47, 824, DateTimeKind.Utc).AddTicks(9699),
                             Description = "Not so nice piece of metal",
                             LastModifiedBy = "Magdalena",
-                            LastModifiedDate = new DateTime(2023, 11, 29, 3, 15, 9, 621, DateTimeKind.Utc).AddTicks(2610),
-                            MaterialProductName = "Some other material",
+                            LastModifiedDate = new DateTime(2023, 11, 27, 21, 53, 47, 824, DateTimeKind.Utc).AddTicks(9699),
+                            ProductWeight = 50.0,
                             ProductionTimeSec = 50.0
                         });
                 });
@@ -259,10 +266,6 @@ namespace Erfa.ProductionManagement.Persistance.Migrations
 
                     b.Property<int>("State")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Worker")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

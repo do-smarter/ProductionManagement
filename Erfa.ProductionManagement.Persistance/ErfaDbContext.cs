@@ -1,4 +1,5 @@
-﻿using Erfa.PruductionManagement.Domain.Common;
+﻿using AutoMapper.Configuration;
+using Erfa.PruductionManagement.Domain.Common;
 using Erfa.PruductionManagement.Domain.Entities.Archive;
 using Erfa.PruductionManagement.Domain.Entities.Production;
 using Microsoft.EntityFrameworkCore;
@@ -23,41 +24,41 @@ namespace Erfa.ProductionManagement.Persistance
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ErfaDbContext).Assembly);
-            string category = "Shelv";
+            modelBuilder.Entity<Item>().HasKey("ProductNumber");
+            base.OnModelCreating(modelBuilder);
+
             string user = "Magdalena";
 
             Item i1 = new Item()
             {
-                Category = category,
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 Description = "Very nice piece of metal",
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 ProductionTimeSec = 100,
                 ProductNumber = "XYZ123",
-                ProductWeight = 100,
+                MaterialProductName = "some material",
             };
 
             Item i2 = new Item()
             {
-                Category = category,
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 Description = "Not so nice piece of metal",
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 ProductionTimeSec = 50,
                 ProductNumber = "ABC987",
-                ProductWeight = 50,
+                MaterialProductName = "Some other material",
             };
 
             ProductionItem pi1 = new ProductionItem()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 Id = Guid.NewGuid(),
                 Item = i1,
                 Comment = "Make it streight",
@@ -69,9 +70,9 @@ namespace Erfa.ProductionManagement.Persistance
             ProductionItem pi2 = new ProductionItem()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 Id = Guid.NewGuid(),
                 Item = i1,
                 Comment = "Don't mix them",
@@ -82,9 +83,9 @@ namespace Erfa.ProductionManagement.Persistance
             ProductionItem pi3 = new ProductionItem()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 Id = Guid.NewGuid(),
                 Item = i2,
                 Comment = "",
@@ -96,9 +97,9 @@ namespace Erfa.ProductionManagement.Persistance
             ProductionItem pi4 = new ProductionItem()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 Id = Guid.NewGuid(),
                 Item = i2,
                 Comment = "ALl",
@@ -110,9 +111,9 @@ namespace Erfa.ProductionManagement.Persistance
             ProductionItem pi5 = new ProductionItem()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 Id = Guid.NewGuid(),
                 Item = i2,
                 Comment = "",
@@ -125,9 +126,9 @@ namespace Erfa.ProductionManagement.Persistance
             ProductionGroup pc1 = new ProductionGroup()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 Id = Guid.NewGuid(),
                 ProductionItems = { pi1 }
 
@@ -136,9 +137,9 @@ namespace Erfa.ProductionManagement.Persistance
             ProductionGroup pc2 = new ProductionGroup()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 Id = Guid.NewGuid(),
                 ProductionItems = { pi2, pi3 }
             };
@@ -146,18 +147,17 @@ namespace Erfa.ProductionManagement.Persistance
             ProductionGroup pc3 = new ProductionGroup()
             {
                 CreatedBy = user,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 LastModifiedBy = user,
-                LastModifiedDate = DateTime.Now,
+                LastModifiedDate = DateTime.UtcNow,
                 Id = Guid.NewGuid(),
                 ProductionItems = { pi4, pi5 }
             };
             List<ProductionGroup> prodList = new List<ProductionGroup> { pc1, pc2, pc3 };
 
             modelBuilder.Entity<Item>().HasData(i1, i2);
-
-            modelBuilder.Entity<Item>().HasKey("ProductNumber");
         }
+
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -166,10 +166,10 @@ namespace Erfa.ProductionManagement.Persistance
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedDate = DateTime.Now;
+                        entry.Entity.CreatedDate = DateTime.UtcNow;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedDate = DateTime.Now;
+                        entry.Entity.LastModifiedDate = DateTime.UtcNow;
                         break;
                 }
             }
@@ -178,7 +178,7 @@ namespace Erfa.ProductionManagement.Persistance
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.ArchiveDate = DateTime.Now;
+                        entry.Entity.ArchiveDate = DateTime.UtcNow;
                         break;
                 }
             }

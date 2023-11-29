@@ -14,9 +14,7 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
                 .WithMessage("{PropertyName} is required.");
             RuleFor(p => p.ProductionTimeSec).NotEmpty().NotNull()
                 .WithMessage("{PropertyName} is required.");
-            RuleFor(p => p.ProductWeight).NotEmpty().NotNull()
-                .WithMessage("{PropertyName} is required.");
-            RuleFor(p => p.Category).NotEmpty().NotNull()
+            RuleFor(p => p.MaterialProductName).NotEmpty().NotNull()
                 .WithMessage("{PropertyName} is required.");
         }
     }

@@ -61,6 +61,12 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRa
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
+
+                var b = ex.InnerException.Message;
+                if (b.StartsWith("23505"))
+                {
+                    throw new EntityAddException("Some Product Numbers already exist");
+                }
                 throw new PersistanceFailedException(nameof(Item), String.Join(", ", result.ToArray()));
             }
         }
