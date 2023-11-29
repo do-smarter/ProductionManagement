@@ -63,7 +63,6 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateRa
                 _logger.LogError(ex.Message, ex);
 
                 var b = ex.InnerException.Message;
-                var xx = "gg";
                 if (b.StartsWith("23505"))
                 {
                     throw new EntityAddException("Some Product Numbers already exist");
