@@ -11,7 +11,6 @@ var app = builder
 using var scope = app.Services.CreateScope();
 
 var context = scope.ServiceProvider.GetService<ErfaDbContext>();
-Console.WriteLine(context.GetType().Name);
 if (context != null)
 {
     context.Database.Migrate();

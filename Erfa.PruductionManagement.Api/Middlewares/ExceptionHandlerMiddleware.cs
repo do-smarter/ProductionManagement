@@ -34,7 +34,6 @@ namespace Erfa.PruductionManagement.Api.Middlewares
             context.Response.ContentType = "application/json";
 
             var result = string.Empty;
-            Console.WriteLine(exception.ToString());
             _logger.LogError(exception, exception.Message);
 
             switch (exception)
@@ -44,6 +43,10 @@ namespace Erfa.PruductionManagement.Api.Middlewares
                     result = JsonSerializer.Serialize(new ValidationErrorDto("Invalid request", 400, validationException.ValdationErrors));
                     break;
                 case EntityUpdateException badRequestException:
+                    httpStatusCode = HttpStatusCode.BadRequest;
+                    result = JsonSerializer.Serialize(new ErrorDto(badRequestException.Message, 400));
+                    break;
+                case EntityAddException badRequestException:
                     httpStatusCode = HttpStatusCode.BadRequest;
                     result = JsonSerializer.Serialize(new ErrorDto(badRequestException.Message, 400));
                     break;

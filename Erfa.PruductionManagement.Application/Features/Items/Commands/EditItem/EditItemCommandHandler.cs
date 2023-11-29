@@ -68,7 +68,6 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
 
         public Item UpdateItemProperties(Item item, EditItemCommand command)
         {
-            item.Category = command.Category;
             item.Description = command.Description;
             item.MaterialProductName = command.MaterialProductName;
             item.ProductionTimeSec = command.ProductionTimeSec;

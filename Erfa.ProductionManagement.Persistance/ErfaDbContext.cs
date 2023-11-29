@@ -27,12 +27,10 @@ namespace Erfa.ProductionManagement.Persistance
             modelBuilder.Entity<Item>().HasKey("ProductNumber");
             base.OnModelCreating(modelBuilder);
 
-            string category = "Shelv";
             string user = "Magdalena";
 
             Item i1 = new Item()
             {
-                Category = category,
                 CreatedBy = user,
                 CreatedDate = DateTime.UtcNow,
                 Description = "Very nice piece of metal",
@@ -45,7 +43,6 @@ namespace Erfa.ProductionManagement.Persistance
 
             Item i2 = new Item()
             {
-                Category = category,
                 CreatedBy = user,
                 CreatedDate = DateTime.UtcNow,
                 Description = "Not so nice piece of metal",

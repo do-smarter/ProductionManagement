@@ -13,7 +13,6 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateIt
             Description = request.Description;
             ProductionTimeSec = request.ProductionTimeSec;
             MaterialProductName = request.MaterialProductName;
-            Category = request.Category;
         }
     }
 }
