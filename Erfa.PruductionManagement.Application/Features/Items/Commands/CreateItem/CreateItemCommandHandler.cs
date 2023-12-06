@@ -13,21 +13,16 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateIt
     {
 
         private readonly IAsyncRepository<Item> _itemRepository;
-        private readonly IAsyncRepository<ItemHistory> _itemHistoryRepository;
         private readonly IMapper _mapper;
         private readonly ProductionService _productionService;
-        private ILogger<CreateItemCommandHandler> _logger { get; }
 
 
         public CreateItemCommandHandler(IAsyncRepository<Item> itemRepository,
-                                        IAsyncRepository<ItemHistory> itemHistoryRepository,
                                         IMapper mapper,
                                         ILogger<CreateItemCommandHandler> logger, ProductionService productionService)
         {
             _itemRepository = itemRepository;
-            _itemHistoryRepository = itemHistoryRepository;
             _mapper = mapper;
-            _logger = logger;
             _productionService = productionService;
         }
 
@@ -40,18 +35,13 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.CreateIt
             item.CreatedBy = request.UserName;
             item.LastModifiedBy = request.UserName;
 
-            ItemHistory history = _mapper.Map<ItemHistory>(item);
-            history.ArchivedBy = request.UserName;
-            history.ArchiveState = Domain.Enums.ArchiveState.Created;
             try
             {
+                //TODO send event
                 await _itemRepository.AddAsync(item);
-                await _itemHistoryRepository.AddAsync(history);
-
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message, ex);
                 throw new PersistanceFailedException(nameof(Item), request);
             }
             return item.ProductNumber;

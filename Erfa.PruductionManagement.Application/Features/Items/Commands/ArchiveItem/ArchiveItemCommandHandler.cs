@@ -10,16 +10,13 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveI
 {
     public class ArchiveItemCommandHandler : IRequestHandler<ArchiveItemCommand>
     {
-        private readonly IAsyncRepository<ItemHistory> _itemHistoryRepository;
         private readonly IItemRepository _itemRepository;
         private readonly IMapper _mapper;
         private readonly ProductionService _productionService;
         public ArchiveItemCommandHandler(
-                         IAsyncRepository<ItemHistory> itemHistoryRepository,
                          IItemRepository itemRepository, IMapper mapper,
                          ProductionService productionService)
         {
-            _itemHistoryRepository = itemHistoryRepository;
             _itemRepository = itemRepository;
             _mapper = mapper;
             _productionService = productionService;
@@ -36,19 +33,15 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.ArchiveI
             {
                 throw new ResourceNotFoundException(nameof(Item), request.ProductNumber);
             }
-
-            ItemHistory history = _mapper.Map<ItemHistory>(item);
-            history.ArchivedBy = request.UserName;
-            history.ArchiveState = Domain.Enums.ArchiveState.Archived;
-
             try
             {
-                await _itemHistoryRepository.AddAsync(history);
+                // TODO send event
+
                 await _itemRepository.DeleteAsync(item);
             }
             catch (Exception ex)
             {
-                throw new PersistanceFailedException(nameof(ItemHistory), request.ProductNumber);
+                throw new PersistanceFailedException(nameof(Item), request.ProductNumber);
             }
             return Unit.Value;
         }

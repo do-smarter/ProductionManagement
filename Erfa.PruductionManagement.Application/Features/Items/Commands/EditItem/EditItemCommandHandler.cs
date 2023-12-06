@@ -11,17 +11,14 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
 {
     public class EditItemCommandHandler : IRequestHandler<EditItemCommand>
     {
-        private readonly IAsyncRepository<ItemHistory> _itemHistoryRepository;
         private readonly IItemRepository _itemRepository;
         private readonly IMapper _mapper;
         private readonly ProductionService _productionService;
 
-        public EditItemCommandHandler(IAsyncRepository<ItemHistory> itemHistoryRepository,
-                                        IItemRepository itemRepository,
+        public EditItemCommandHandler(IItemRepository itemRepository,
                                         IMapper mapper,
                                         ProductionService productionService)
         {
-            _itemHistoryRepository = itemHistoryRepository;
             _itemRepository = itemRepository;
             _mapper = mapper;
             _productionService = productionService;
@@ -43,19 +40,12 @@ namespace Erfa.PruductionManagement.Application.Features.Items.Commands.EditItem
             if (!item.Updated(updated))
             {
                 return Unit.Value;
-
-                // throw new EntityUpdateException(nameof(Item), request.ProductNumber);
             }
-
-            ItemHistory history = _mapper.Map<ItemHistory>(item);
-            history.ArchivedBy = request.UserName;
-            history.ArchiveState = Domain.Enums.ArchiveState.Changed;
 
             item = UpdateItemProperties(item, request);
 
             try
             {
-                await _itemHistoryRepository.AddAsync(history);
                 await _itemRepository.UpdateAsync(item);
             }
             catch (Exception ex)
