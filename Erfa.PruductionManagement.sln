@@ -21,15 +21,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erfa.ProductionManagement.P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erfa.PruductionManagement.Api", "Erfa.PruductionManagement.Api\Erfa.PruductionManagement.Api.csproj", "{8970AE80-306B-4E0D-8BAA-860F565D888D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erfa.ProductionManagement.Application.Test.Unit", "Erfa.ProductionManagement.Application.Test.Unit\Erfa.ProductionManagement.Application.Test.Unit.csproj", "{8DF80279-35FD-467A-BD79-F0B65698F7CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erfa.ProductionManagement.Application.Test.Unit", "Erfa.ProductionManagement.Application.Test.Unit\Erfa.ProductionManagement.Application.Test.Unit.csproj", "{8DF80279-35FD-467A-BD79-F0B65698F7CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erfa.ProductionManagement.Persistance.Test.Integration", "Erfa.ProductionManagement.Persistance.Test.Integration\Erfa.ProductionManagement.Persistance.Test.Integration.csproj", "{994F6205-A298-4B36-BBFD-0E28486B2CBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erfa.ProductionManagement.Persistance.Test.Integration", "Erfa.ProductionManagement.Persistance.Test.Integration\Erfa.ProductionManagement.Persistance.Test.Integration.csproj", "{994F6205-A298-4B36-BBFD-0E28486B2CBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erfa.ProductionManagement.Api.Test.Integration", "Erfa.ProductionManagement.Api.Test.Integration\Erfa.ProductionManagement.Api.Test.Integration.csproj", "{5D01896A-89F4-466E-94A8-9AA46F150AA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erfa.ProductionManagement.Api.Test.Integration", "Erfa.ProductionManagement.Api.Test.Integration\Erfa.ProductionManagement.Api.Test.Integration.csproj", "{5D01896A-89F4-466E-94A8-9AA46F150AA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erfa.ProductionManagement.Servicei.Test.Acceptance", "Erfa.ProductionManagement.Servicei.Test.Acceptance\Erfa.ProductionManagement.Servicei.Test.Acceptance.csproj", "{76156A7B-8D0E-4DB8-874D-2BB5C1BCB496}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModel", "..\Erfa-Pro\DataModel\DataModel.csproj", "{781B0709-9846-471F-A169-E4F70E8F6580}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erfa.ProductionManagement.Servicei.Test.Acceptance", "Erfa.ProductionManagement.Servicei.Test.Acceptance\Erfa.ProductionManagement.Servicei.Test.Acceptance.csproj", "{76156A7B-8D0E-4DB8-874D-2BB5C1BCB496}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,10 +67,6 @@ Global
 		{76156A7B-8D0E-4DB8-874D-2BB5C1BCB496}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76156A7B-8D0E-4DB8-874D-2BB5C1BCB496}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76156A7B-8D0E-4DB8-874D-2BB5C1BCB496}.Release|Any CPU.Build.0 = Release|Any CPU
-		{781B0709-9846-471F-A169-E4F70E8F6580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{781B0709-9846-471F-A169-E4F70E8F6580}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{781B0709-9846-471F-A169-E4F70E8F6580}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{781B0709-9846-471F-A169-E4F70E8F6580}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

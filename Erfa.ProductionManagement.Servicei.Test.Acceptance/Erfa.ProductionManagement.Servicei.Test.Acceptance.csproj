@@ -27,8 +27,4 @@
     <Folder Include="Support\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Erfa-Pro\DataModel\DataModel.csproj" />
-  </ItemGroup>
-
 </Project>
