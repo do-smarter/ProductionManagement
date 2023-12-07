@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Erfa.PruductionManagement.Domain\Erfa.PruductionManagement.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Catalog\" />
+  </ItemGroup>
+
 </Project>

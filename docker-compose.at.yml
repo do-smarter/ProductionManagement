@@ -1,4 +1,4 @@
-version: '3.9'
+﻿version: '3.9'
 name: erfa-productionmanagement
 
 services:
@@ -24,7 +24,7 @@ services:
         dockerfile: Dockerfile
     container_name: erfa_production_service
     ports:
-      - 5060:80
+      - 4060:80
     environment:
       - ConnectionStrings__PostgreSQLConnString=Host=data_prod;Port=4433;Database=ProductionManagement;Username=sa;Password=Qwer!234
     networks:

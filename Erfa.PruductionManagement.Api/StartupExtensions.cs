@@ -20,11 +20,8 @@ namespace Erfa.PruductionManagement.Api
               {
                   options.ReportApiVersions = true;
                   options.Conventions.Controller<Controllers.V1.ItemController>().HasApiVersion(new ApiVersion(1, 0));
-                  options.Conventions.Controller<Controllers.V2.ItemController>().HasApiVersion(new ApiVersion(2, 0));
                   options.Conventions.Controller<Controllers.V1.ProductionGroupController>().HasApiVersion(new ApiVersion(1, 0));
-                  options.Conventions.Controller<Controllers.V2.ProductionGroupController>().HasApiVersion(new ApiVersion(2, 0));
                   options.Conventions.Controller<Controllers.V1.ProductionItemController>().HasApiVersion(new ApiVersion(1, 0));
-                  options.Conventions.Controller<Controllers.V2.ProductionItemController>().HasApiVersion(new ApiVersion(2, 0));
               }
             );
 
